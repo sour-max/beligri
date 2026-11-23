@@ -12,11 +12,13 @@ favicon.svg         лого: страната „пет“ на зар, зав�
 img/                картинки за страниците (снимка на игралното поле)
 pod-igoto/index.html  „Пътят към свободата“ по „Под игото“ → beligri.org/pod-igoto/
 bai-ganyo/index.html  „Депутацията“ по „Бай Ганьо се върна от Европа“ → beligri.org/bai-ganyo/
+cis-moll/index.html   „Съдбата хлопа“ по „Cis moll“ → beligri.org/cis-moll/
 nvo/index.html        как игрите помагат за НВО (новият формат от 2027 г.)
 za-nas/index.html     за нас
 za-uchitelya/index.html  за учителя: как се провежда игра за ~15 минути от часа, връзка към PDF
 pod-igoto/otgovori.pdf   отговори за учителя (генерират се със скрипт, вж. по-долу)
 bai-ganyo/otgovori.pdf   същото за „Бай Ганьо“
+cis-moll/otgovori.pdf    същото за „Cis moll“
 tools/answer-key.js   генератор на PDF с отговорите от данните на играта
 functions/_middleware.js  пренасочване www → beligri.org
 ```
@@ -39,6 +41,7 @@ functions/_middleware.js  пренасочване www → beligri.org
 ```
 node tools/answer-key.js pod-igoto "„Под игото“" "Пътят към свободата"
 node tools/answer-key.js bai-ganyo "„Бай Ганьо се върна от Европа“" "Депутацията" разказа
+node tools/answer-key.js cis-moll "„Cis moll“" "Съдбата хлопа" поемата
 ```
 
 Последният аргумент казва какъв е текстът („романа“ по подразбиране, „разказа“ и т.н.) и влиза в заглавието на PDF.
@@ -61,7 +64,7 @@ Cloudflare Pages, проект `beligri` (адрес по подразбиран
 
 ```
 mkdir -p /tmp/beligri-dist
-git archive HEAD -- index.html site.css 404.html favicon.svg img pod-igoto bai-ganyo nvo za-nas za-uchitelya | tar -x -C /tmp/beligri-dist
+git archive HEAD -- index.html site.css 404.html favicon.svg img pod-igoto bai-ganyo cis-moll nvo za-nas za-uchitelya | tar -x -C /tmp/beligri-dist
 npx wrangler pages deploy /tmp/beligri-dist --project-name beligri --branch main
 ```
 

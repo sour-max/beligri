@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Съдбата хлопа · „Cis moll“</title>
+<meta name="description" content="Игра за класа по поемата „Cis moll“ на Пенчо Славейков: отбори, зар, въпроси и цитати. 10. клас.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ruslan+Display&family=Alegreya:ital,wght@0,500;0,700;1,500&family=Alegreya+Sans:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: one-screen game for a classroom board. Map on the left, teams on the right, cards open over the map. */
+:root {
+  --ink: #0f1422;          /* summer night */
+  --panel: #172036;
+  --panel-2: #1f2a44;
+  --line: #2f3c5c;
+  --linen: #ece6d6;        /* text */
+  --muted: #a5afc6;
+  --brass: #e0b85a;        /* accent: candle light on the piano */
+  --flag: #c8372d;
+  --q-green: #4f9d5d;
+  --q-yellow: #e0b23a;
+  --q-red: #c8372d;
+  --ok: #5fbf72;
+  --bad: #e2584a;
+  --font-display: "Ruslan Display", "Alegreya", Georgia, serif;
+  --font-text: "Alegreya", Georgia, "Times New Roman", serif;
+  --font-ui: "Alegreya Sans", "Segoe UI", Arial, sans-serif;
+  --t1: #d9483b; --t2: #4a86d6; --t3: #e6b93a; --t4: #63b86e;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: radial-gradient(ellipse at 30% 20%, #1e2a48 0%, var(--ink) 60%) fixed, var(--ink);
+  color: var(--linen);
+  font-family: var(--font-ui);
+  font-size: clamp(15px, 1.15vw, 20px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+*, *::before, *::after { box-sizing: border-box; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+
+/* ---------- setup ---------- */
+#setup { max-width: 1360px; margin: 0 auto; display: grid; gap: 22px; padding-block: 12px; }
+.title-block { display: grid; gap: 10px; }
+.title-block .eyebrow { font-family: var(--font-ui); text-transform: uppercase; letter-spacing: .14em; color: var(--brass); font-weight: 700; font-size: .85em; }
+.title-block h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.2rem, 4.4vw, 4.2rem); line-height: 1; color: var(--linen); }
+.title-block p { font-family: var(--font-text); font-size: 1.15em; color: var(--muted); max-width: 90ch; margin: 0; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 24px; align-items: start; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.box h2 { font-family: var(--font-ui); font-size: 1em; text-transform: uppercase; letter-spacing: .12em; color: var(--brass); }
+.seg { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg button { padding: 10px 18px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); font-weight: 700; min-width: 64px; }
+.seg button[aria-pressed="true"] { background: var(--brass); color: #1b1407; border-color: var(--brass); }
+.team-inputs { display: grid; gap: 10px; }
+.team-row { display: flex; align-items: center; gap: 10px; }
+.team-row .flag-dot { width: 22px; height: 22px; border-radius: 50%; flex: none; border: 2px solid rgba(0,0,0,.35); }
+.team-row input { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--ink); color: var(--linen); font: inherit; font-weight: 700; }
+.rules { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; font-size: .95em; color: var(--linen); }
+.rules li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; }
+.rules .chip { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: .8em; color: #10201b; }
+.rules b { color: var(--brass); font-weight: 700; }
+.primary { background: var(--flag); color: #fff6ea; border: 0; border-radius: 10px; padding: 16px 28px; font-weight: 800; font-size: 1.2em; letter-spacing: .02em; box-shadow: 0 6px 0 #7f1f19; transition: transform .1s, box-shadow .1s; }
+.primary:active { transform: translateY(4px); box-shadow: 0 2px 0 #7f1f19; }
+.secondary { background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px; font-weight: 700; color: var(--linen); }
+.start-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.note { color: var(--muted); font-size: .9em; }
+
+/* ---------- game ---------- */
+#game { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) clamp(260px, 22vw, 360px); gap: 16px; }
+.board-wrap { min-width: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 8px; min-height: 0; }
+.topbar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.topbar h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.4rem, 2.4vw, 2.3rem); }
+.topbar .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+.board { min-height: 0; display: grid; place-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.board svg { width: 100%; height: 100%; max-height: 100%; display: block; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .85em; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+
+.side { display: grid; grid-template-rows: auto auto 1fr; gap: 12px; min-height: 0; min-width: 0; }
+.turn-box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; justify-items: center; text-align: center; }
+.turn-label { font-size: .8em; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
+.turn-name { font-family: var(--font-text); font-weight: 700; font-size: 1.5em; line-height: 1.1; }
+.dice { width: 112px; height: 112px; border-radius: 18px; background: #f3ead6; border: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 16px; box-shadow: 0 7px 0 #b7a986, 0 10px 24px rgba(0,0,0,.4); transition: transform .1s; }
+.dice:active { transform: translateY(4px); box-shadow: 0 3px 0 #b7a986; }
+.dice:disabled { opacity: .45; cursor: default; }
+.dice .pip { width: 18px; height: 18px; border-radius: 50%; background: #1d1a14; place-self: center; visibility: hidden; }
+.dice .pip.on { visibility: visible; }
+.dice.rolling { animation: shake .5s linear; }
+@keyframes shake { 0%{transform:rotate(0)} 25%{transform:rotate(-14deg)} 50%{transform:rotate(12deg)} 75%{transform:rotate(-8deg)} 100%{transform:rotate(0)} }
+.dice-hint { font-size: .9em; color: var(--muted); min-height: 1.3em; }
+
+.teams { display: grid; gap: 8px; }
+.team-card { display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.team-card.active { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.team-card .bar { width: 14px; height: 100%; min-height: 34px; border-radius: 4px; }
+.team-card .nm { font-weight: 700; line-height: 1.15; min-width: 0; overflow-wrap: anywhere; }
+.team-card .meta { font-size: .8em; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+.team-card .pos { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.2em; color: var(--brass); }
+.log { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; overflow: auto; min-height: 80px; }
+.log h3 { font-size: .8em; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); margin-bottom: 6px; }
+.log ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: .9em; }
+.log li:first-child { color: var(--linen); }
+.log li { color: var(--muted); }
+
+/* svg pieces */
+.cell-circle { stroke: #0b1512; stroke-width: 3; }
+.cell-icon { fill: #10201b; font-family: var(--font-ui); font-weight: 800; font-size: 22px; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.station-label { font-family: var(--font-ui); font-weight: 700; font-size: 17px; letter-spacing: .08em; text-transform: uppercase; fill: var(--linen); }
+.station-bg { fill: var(--ink); opacity: .82; }
+.token { transition: transform .22s ease-out; }
+.token circle { stroke: #0b1512; stroke-width: 3; }
+.token text { font-family: var(--font-ui); font-weight: 800; font-size: 16px; fill: #0b1512; text-anchor: middle; dominant-baseline: central; }
+.token.active circle { stroke: #fff6ea; stroke-width: 4; }
+
+/* ---------- overlay card ---------- */
+.overlay { position: fixed; inset: 0; background: rgba(6, 12, 10, .78); display: grid; place-items: center; padding: 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); z-index: 20; overflow: auto; }
+.card { width: min(1200px, 100%); background: #f3ead6; color: #1d1a14; border-radius: 14px; padding: clamp(18px, 2.4vw, 40px); display: grid; gap: clamp(14px, 1.6vw, 24px); box-shadow: 0 20px 60px rgba(0,0,0,.55); position: relative; }
+.card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kind { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; font-size: .9em; }
+.kind i { width: 18px; height: 18px; border-radius: 50%; display: inline-block; }
+.who { font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
+.who i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+.q-text { font-family: var(--font-text); font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 2.6rem); line-height: 1.2; text-wrap: balance; }
+.q-quote { font-family: var(--font-text); font-style: italic; font-weight: 500; font-size: clamp(1.5rem, 2.8vw, 2.8rem); line-height: 1.25; border-left: 6px solid var(--q-red); padding-left: .6em; }
+.q-sub { font-weight: 700; color: #5a5242; font-size: 1.1em; }
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.opt { text-align: left; background: #fffaf0; border: 2px solid #d9cdb2; border-radius: 12px; padding: 18px 20px; font-size: clamp(1.05rem, 1.7vw, 1.6rem); font-weight: 700; color: #1d1a14; display: flex; gap: 14px; align-items: center; min-height: 76px; }
+.opt .ltr { width: 40px; height: 40px; border-radius: 50%; background: #1d1a14; color: #f3ead6; display: grid; place-items: center; flex: none; font-size: .85em; }
+.opt:hover:not(:disabled) { border-color: #1d1a14; }
+.opt:disabled { cursor: default; }
+.opt.correct { background: #d7efd9; border-color: #2f8a44; }
+.opt.wrong { background: #f6d3cd; border-color: #b23a2c; }
+.opt.gone { opacity: .25; }
+.timer { height: 10px; background: #e2d7bd; border-radius: 6px; overflow: hidden; }
+.timer > div { height: 100%; background: #1d1a14; width: 100%; transition: width 1s linear; }
+.timer.low > div { background: var(--q-red); }
+.card-foot { display: flex; gap: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.btn-dark { background: #1d1a14; color: #f3ead6; border: 0; border-radius: 10px; padding: 14px 26px; font-weight: 800; font-size: 1.1em; }
+.btn-ghost { background: transparent; color: #1d1a14; border: 2px solid #1d1a14; border-radius: 10px; padding: 12px 20px; font-weight: 800; }
+.btn-ghost:disabled { opacity: .35; cursor: default; }
+.verdict { display: grid; gap: 8px; background: #fffaf0; border-radius: 12px; padding: 16px 20px; border: 2px solid #d9cdb2; }
+.verdict .v-title { font-weight: 800; font-size: 1.3em; }
+.verdict .v-title.ok { color: #2f8a44; }
+.verdict .v-title.bad { color: #b23a2c; }
+.verdict .v-note { font-family: var(--font-text); font-size: 1.15em; line-height: 1.4; }
+.verdict .v-ch { font-size: .9em; color: #6b624f; font-weight: 700; }
+
+/* duel */
+.duel { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.duel-side { border-radius: 12px; padding: 14px; display: grid; gap: 10px; border: 4px solid; background: #fffaf0; }
+.duel-side h3 { font-size: 1.1em; display: flex; justify-content: space-between; gap: 8px; }
+.duel-side .options { grid-template-columns: 1fr; gap: 10px; }
+.duel-side .opt { min-height: 60px; padding: 12px 14px; font-size: clamp(1rem, 1.4vw, 1.35rem); }
+.pick-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.pick-row button { border: 0; border-radius: 10px; padding: 16px 22px; font-weight: 800; font-size: 1.1em; color: #10201b; }
+
+/* match & order */
+.match { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+.match .col { display: grid; gap: 12px; align-content: start; }
+.m-item { background: #fffaf0; border: 2px solid #d9cdb2; border-radius: 12px; padding: 14px 16px; font-weight: 700; font-size: clamp(1rem, 1.5vw, 1.4rem); text-align: left; min-height: 64px; display: flex; align-items: center; gap: 12px; color: #1d1a14; }
+.m-item .tag { width: 30px; height: 30px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: .8em; color: #fff; background: #b8ad93; }
+.m-item.sel { border-color: #1d1a14; box-shadow: 0 0 0 3px #1d1a14 inset; }
+.m-item.ok { background: #d7efd9; border-color: #2f8a44; }
+.m-item.bad { background: #f6d3cd; border-color: #b23a2c; }
+.order-list { display: grid; gap: 12px; }
+.m-item .num { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; background: #e2d7bd; color: #1d1a14; font-weight: 800; }
+.m-item .num.set { background: #1d1a14; color: #f3ead6; }
+
+/* event & win */
+.event-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 3.6vw, 3.4rem); line-height: 1.05; }
+.event-text { font-family: var(--font-text); font-size: clamp(1.2rem, 2vw, 1.9rem); line-height: 1.35; }
+.fx { font-weight: 800; font-size: 1.3em; color: #7f1f19; }
+.win-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.2rem, 5vw, 4.6rem); line-height: 1.02; }
+.stats { display: grid; gap: 8px; }
+.stats div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid #d9cdb2; padding-block: 6px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 900px) {
+  #game { grid-template-columns: 1fr; height: auto; }
+  .setup-grid { grid-template-columns: 1fr; }
+  .options, .duel, .match { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .token { transition: none; }
+  .dice.rolling { animation: none; }
+  .timer > div { transition: none; }
+}
+[hidden] { display: none !important; }
+body { margin: 0; }
+/* site logo, same as on beligri.org pages */
+.logo { justify-self: start; display: inline-flex; align-items: center; gap: 10px; color: var(--linen); text-decoration: none; margin-bottom: 10px; }
+.logo-mark { width: 36px; height: 36px; flex: none; transition: transform .35s cubic-bezier(.3,1.6,.5,1); }
+.logo:hover .logo-mark { transform: rotate(90deg); }
+.logo-word { font-size: 1.3rem; line-height: 1; }
+.logo-word b { font-family: var(--font-display); font-weight: 400; color: #e2584a; }
+.logo-word i { font-family: var(--font-text); font-weight: 700; }
+</style>
+</head>
+<body>
+<!-- ============ SETUP ============ -->
+<section id="setup">
+  <div class="title-block">
+    <a class="logo" href="/" aria-label="БЕЛ игри, към началото"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="7" width="26" height="26" rx="4" transform="rotate(45 20 20)" fill="#c8372d"/><g fill="#efe6d2"><rect x="18" y="18" width="4" height="4" transform="rotate(45 20 20)"/><rect x="18" y="8" width="4" height="4" transform="rotate(45 20 10)"/><rect x="18" y="28" width="4" height="4" transform="rotate(45 20 30)"/><rect x="8" y="18" width="4" height="4" transform="rotate(45 10 20)"/><rect x="28" y="18" width="4" height="4" transform="rotate(45 30 20)"/></g></svg><span class="logo-word"><b>БЕЛ</b> <i>игри</i></span></a>
+    <span class="eyebrow">Игра по „Cis moll“ на Пенчо Славейков · 10. клас</span>
+    <h1>Съдбата хлопа</h1>
+    <p>„Cis moll“ е поема на Пенчо Славейков от книгата „Епически песни“. В една лятна нощ оглушалият Бетховен минава от отчаянието до ново творчество. Класът се разделя на отбори. Те тръгват от прозореца на Бетховен и с верни отговори стигат до безсмъртието.</p>
+  </div>
+  <div class="setup-grid">
+    <div class="box">
+      <h2>Колко отбора</h2>
+      <div class="seg" id="countSeg" role="group" aria-label="Брой отбори">
+        <button type="button" data-n="2" aria-pressed="false">2</button>
+        <button type="button" data-n="3" aria-pressed="true">3</button>
+        <button type="button" data-n="4" aria-pressed="false">4</button>
+      </div>
+      <h2>Имена на отборите</h2>
+      <div class="team-inputs" id="teamInputs"></div>
+      <h2>Време за въпрос</h2>
+      <div class="seg" id="timeSeg" role="group" aria-label="Време за въпрос">
+        <button type="button" data-t="30" aria-pressed="true">30 с</button>
+        <button type="button" data-t="45" aria-pressed="false">45 с</button>
+        <button type="button" data-t="0" aria-pressed="false">без таймер</button>
+      </div>
+    </div>
+    <div class="box">
+      <h2>Правила</h2>
+      <ul class="rules">
+        <li><span class="chip" style="background:var(--q-green)">?</span><span><b>Зелено</b>: факт от текста. Вярно: +1, грешно: −1.</span></li>
+        <li><span class="chip" style="background:var(--q-yellow)">?</span><span><b>Жълто</b>: въпрос за смисъла. Вярно: +2, грешно: −1.</span></li>
+        <li><span class="chip" style="background:var(--q-red)">„</span><span><b>Червено</b>: цитат. Вярно: +3, грешно: −2.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">⚔</span><span><b>Двубой</b>: избирате противник. По един човек от отбор излиза на дъската. Кой пръв докосне верния отговор: +2, другият −1.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">★</span><span><b>Цялата класа</b>: отговаря всеки. Водещият отбелязва отбора, който пръв отговори вярно: +1.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">↔</span><span><b>Свържи</b> и <b>Подреди</b>: капитанът работи на дъската, класът подсказва.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">!</span><span><b>Събитие</b>: случка от поемата помага или пречи.</span></li>
+        <li><span class="chip" style="background:var(--brass)">В</span><span><b>Висшият слух</b>: веднъж за игра махате два грешни отговора.</span></li>
+        <li><span class="chip" style="background:var(--flag);color:#fff">★</span><span><b>Финал</b>: на полето „Безсмъртие“ отборът отговаря на цитат. Вярно: победа. Грешно: назад с 3.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="start-row">
+    <button type="button" class="primary" id="startBtn">Тръгваме!</button>
+    <span class="note">Най-добре се играе на цял екран на интерактивната дъска.</span>
+  </div>
+</section>
+
+<!-- ============ GAME ============ -->
+<section id="game" hidden>
+  <div class="board-wrap">
+    <div class="topbar">
+      <h1>Съдбата хлопа</h1>
+      <div class="tools">
+        <button type="button" class="secondary" id="fsBtn">Цял екран</button>
+        <button type="button" class="secondary" id="rulesBtn">Правила</button>
+        <button type="button" class="secondary" id="newBtn">Нова игра</button>
+      </div>
+    </div>
+    <div class="board"><svg id="boardSvg" viewBox="0 0 1000 600" role="img" aria-label="Игрално поле: пътят от прозореца на Бетховен до безсмъртието"></svg></div>
+    <div class="legend">
+      <span><i style="background:var(--q-green)"></i>факт</span>
+      <span><i style="background:var(--q-yellow)"></i>смисъл</span>
+      <span><i style="background:var(--q-red)"></i>цитат</span>
+      <span><i style="background:#e9dcc0"></i>двубой · цялата класа · свържи · подреди · събитие</span>
+    </div>
+  </div>
+  <aside class="side">
+    <div class="turn-box">
+      <span class="turn-label">На ход е</span>
+      <span class="turn-name" id="turnName"></span>
+      <button type="button" class="dice" id="dice" aria-label="Хвърли зара"></button>
+      <span class="dice-hint" id="diceHint">Докоснете зара</span>
+    </div>
+    <div class="teams" id="teamList"></div>
+    <div class="log"><h3>Какво стана</h3><ol id="log"></ol></div>
+  </aside>
+</section>
+
+<div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+
+<script>
+/* =====================================================================
+   ВЪПРОСИ. Добавяйте нови въпроси тук.
+   t: 'g' зелено (факт), 'y' жълто (смисъл), 'r' червено (цитат)
+   q: въпрос; quote: цитат (само за червени); o: 4 отговора; a: номер на верния (0–3)
+   n: кратко обяснение; ch: част от поемата
+   ===================================================================== */
+const QUESTIONS = [
+  // ---- Заглавие, мото, автор
+  { t:'g', k:['zaglavie'], q:'Какво означава заглавието „Cis moll“?', o:['До диез минор: музикална тоналност','Името на ученика на Бетховен','„Тъжна песен“ на латински','Името на града, в който живее Бетховен'], a:0, n:'Cis moll е тоналността до диез минор. В нея е „Лунната соната“ на Бетховен.', ch:'Заглавието' },
+  { t:'g', k:['moto'], q:'На какъв език е мотото на поемата?', o:['На немски','На латински','На френски','На италиански'], a:0, n:'„So pocht das Schicksal an die Pforte.“ означава „Така съдбата хлопа на портата“. Думите се приписват на Бетховен.', ch:'Мотото' },
+  { t:'g', k:['kniga'], q:'В коя книга на Пенчо Славейков е поемата „Cis moll“?', o:['„Епически песни“','„Кървава песен“','„Сън за щастие“','„На Острова на блажените“'], a:0, n:'В „Епически песни“ Славейков пише за велики творци и за силата на човешкия дух.', ch:'Авторът и творбата' },
+  { t:'g', k:['misal'], q:'С кой литературен кръг е свързан Пенчо Славейков?', o:['„Мисъл“','„Хиперион“','„Стрелец“','„Златорог“'], a:0, n:'В кръга „Мисъл“ са Пенчо Славейков, д-р Кръстьо Кръстев, Пейо Яворов и Петко Тодоров. За тях в центъра е личността.', ch:'Авторът и творбата' },
+  { t:'g', k:['geroj'], q:'Кой е героят на поемата?', o:['Бетховен','Моцарт','Шопен','Омир'], a:0, n:'Великият композитор е оглушал. Поемата разказва една негова нощ.', ch:'Авторът и творбата' },
+
+  // ---- Нощта и роялът
+  { t:'g', k:['noshta'], q:'Каква е нощта в началото на поемата?', o:['Ясна лятна нощ със звезди','Зимна нощ с виелица','Есенна нощ с дъжд','Пролетна нощ с гръмотевици'], a:0, n:'„Таинствена и чудна лятна нощ“, над „сънний мир“ сияят „рой трепетни звездици“.', ch:'Началото: нощта' },
+  { t:'g', k:['prozorec'], q:'Какво прави Бетховен в началото?', o:['Отмахва завесите и застава пред отворения прозорец','Свири на роял пред публика','Пише писмо до приятел','Разговаря с ученика си'], a:0, n:'„Отмахна той завесите и тихо застана пред отворений прозорец.“', ch:'Началото: нощта' },
+  { t:'g', k:['royal'], q:'Какво става, когато Бетховен сяда пред рояла за първи път?', o:['Звуците прекъсват и той отпуска ръце','Изсвирва цялата соната','Роялът е заключен','Ученикът го спира'], a:0, n:'„Разсипаха се звуци бурен вихър и трепнаха прекъснати.“ После той навежда „смъртно бледен лик“.', ch:'Началото: роялът' },
+  { t:'y', k:['mrak'], q:'Защо Бетховен не вижда красотата на ясната нощ?', o:['Мракът е в душата му','Небето е облачно','Той е сляп','Заспал е до прозореца'], a:0, n:'„Нощта бе ясна, но злокобен мрак се сбираше Бетховену в душата…“', ch:'Началото: нощта' },
+  { t:'y', k:['mrak'], q:'Какъв контраст има в началото на поемата?', o:['Светлата нощ навън и мракът в душата на героя','Шумният град и тихото село','Богатият дом и бедната улица','Младият ученик и старият учител'], a:0, n:'Светът е спокоен и красив, а в героя се събира „злокобен мрак“.', ch:'Началото: нощта' },
+
+  // ---- Отчаянието
+  { t:'g', k:['slepec'], q:'С кого се сравнява Бетховен в отчаянието си?', o:['Със слепец','С птица в клетка','С моряк в буря','С изгнаник'], a:0, n:'„Слепецът няма слънцето да види.“ За него звуците на музиката са като лъчите на слънцето.', ch:'Монологът: отчаянието' },
+  { t:'y', k:['chest'], q:'Защо глухотата е особено жестока за Бетховен?', o:['Той е композитор, творец на хармонията','Не може да говори с хората','Губи всичките си приятели','Остава без пари'], a:0, n:'Призракът на неговата чест му се смее: „Творецът на хармонията — глух!“', ch:'Монологът: отчаянието' },
+  { t:'y', k:['pokoj'], q:'Какъв покой иска отначало душата на Бетховен?', o:['Покоя на гроба, където съдбата не хлопа','Покой сред природата','Сън до сутринта','Тишина, за да твори'], a:0, n:'„…покой във гроба — на чиито двери няма съдбата ни да хлопа, ни зове!“', ch:'Монологът: отчаянието' },
+  { t:'y', k:['moto'], q:'Как мотото е свързано с поемата?', o:['Глухотата е ударът на съдбата, която хлопа на вратата на Бетховен','Мотото описва лятната нощ','Мотото е посвещение на ученика','Мотото е заглавието на сонатата'], a:0, n:'В монолога Бетховен мечтае за гроба, „на чиито двери няма съдбата ни да хлопа“.', ch:'Мотото' },
+
+  // ---- Обратът
+  { t:'g', k:['genij'], q:'Какво отблъсква удара на смъртта?', o:['Геният, хранителят на душата','Ученикът','Звездите','Една молитва'], a:0, n:'„Но геният, хранител на душата, отблъсна властно удара…“', ch:'Обратът' },
+  { t:'y', k:['malodushie'], q:'Как Бетховен нарича мисълта, че смъртта е избавление?', o:['Малодушие','Мъдрост','Смелост','Съдба'], a:0, n:'„В смъртта покой?! Дали не малодушье за него с своя милкав глас ми шепне?“', ch:'Обратът' },
+  { t:'g', k:['omir'], q:'Кой велик слепец си спомня Бетховен?', o:['Омир','Милтън','Хораций','Сократ'], a:0, n:'„Сляп бил си ти! И Омир бил е сляп“, но „едничък само той е виждал ясно“.', ch:'Обратът: Омир' },
+  { t:'y', k:['omir'], q:'Какво доказва за Бетховен примерът на Омир?', o:['Истинският поглед идва от душата, не от очите','Слепотата убива таланта','Поетите са по-силни от музикантите','Старите времена са по-добри'], a:0, n:'„Не из очите погледът излиза, а на душата из Света Светих.“', ch:'Обратът: Омир' },
+
+  // ---- Възраждането
+  { t:'y', k:['visshsluh'], q:'Какво е „Висший Слух“ в поемата?', o:['Вътрешният, духовният слух на твореца','Слухът на публиката','Слухът на ученика','Лекарство за глухота'], a:0, n:'Загубата „на единий слух“ не убива идеала, „когато него Висший Слух поддържа“.', ch:'Възраждането' },
+  { t:'y', k:['stradanie'], q:'Какво намира Бетховен в страданието?', o:['Нови звукове за нови чувства','Причина да спре да твори','Само болка','Покой'], a:0, n:'„И само в него ази ще намеря за нови чувства нови звукове…“', ch:'Възраждането' },
+  { t:'g', k:['tvorenie'], q:'Към какво се връща Бетховен, след като се възражда?', o:['Към изоставеното си творение','Към писмата си','Към прозореца','Към леглото си'], a:0, n:'„…той сафърленото свое творение отново залови — и се забрави, и забрави всичко…“', ch:'Възраждането' },
+
+  // ---- Ученикът и финалът
+  { t:'g', k:['uchenik'], q:'Кой влиза тихо в стаята, докато Бетховен свири?', o:['Един от младите му ученици','Неговият брат','Лекарят','Издателят му'], a:0, n:'Бетховен не го забелязва: той е потънал в своята „забрава“.', ch:'Ученикът' },
+  { t:'y', k:['uchenik'], q:'Защо ученикът не разбира новата музика?', o:['Тя нарушава познатите правила за форма и строй','Той също е глух','Музиката е твърде тиха','Не обича Бетховен'], a:0, n:'Той мисли, че учителят е загубил „паметта за формата и строя“. Новото изкуство му изглежда като безумие.', ch:'Ученикът' },
+  { t:'y', k:['prometej'], q:'Защо Бетховен е сравнен с Прометей?', o:['Дава на хората небесния огън на изкуството','Открадва огън само за себе си','Бунтува се срещу хората','Живее на висока планина'], a:0, n:'„Ти сне от небесата пламък Прометеев да го запалиш в хорските сърца и възгорени, да ги възвисиш.“', ch:'Финалът: гласът на съзнанието' },
+  { t:'y', k:['bezsmartie'], q:'Как творецът ще живее след смъртта според финала?', o:['В сърцата на хората, чрез творбите си','В паметниците по площадите','Само в спомена на семейството си','Никак: смъртта е краят'], a:0, n:'„И в тях сърца, един през векове, ти ще живейш безсмъртен в смъртний мир.“', ch:'Финалът: гласът на съзнанието' },
+  { t:'y', k:['ideya'], q:'Каква е основната идея на поемата?', o:['Великата личност превъзмогва страданието и твори','Съдбата винаги е по-силна от човека','Изкуството е лесно за истинския талант','Ученикът е по-мъдър от учителя'], a:0, n:'Бетховен минава от отчаяние до ново творчество. Страданието става извор на изкуството.', ch:'Цялата поема' },
+  { t:'y', k:['lichno'], q:'Защо темата е близка до самия Пенчо Славейков?', o:['Той също боледува тежко и превъзмогва страданието с творчество','Той също е композитор','Учил е при Бетховен','Бил е глух'], a:0, n:'Като младеж Славейков заболява тежко и цял живот ходи трудно, с бастун. Но не спира да твори.', ch:'Авторът и творбата' },
+
+  // ---- Анализ: жанр, конфликт, композиция, средства
+  { t:'g', k:['zhanr'], q:'Към какъв жанр принадлежи „Cis moll“?', o:['Лиро-епическа поема','Разказ','Ода','Комедия'], a:0, n:'Има сюжет и герой като в епоса, но и силни чувства и размисли като в лириката. Затова е лиро-епическа поема.', ch:'Анализ: жанр' },
+  { t:'y', k:['zhanr'], q:'Какво прави „Cis moll“ лиро-епическа творба?', o:['Има сюжет за една нощ на Бетховен и много чувства и размисли','Има само чувства, без събития','Има само диалози, като пиеса','Написана е в проза'], a:0, n:'Епосът дава случката: нощта, роялът, ученикът. Лириката дава отчаянието, съмненията и възраждането.', ch:'Анализ: жанр' },
+  { t:'g', k:['stih'], q:'Какъв е стихът на поемата?', o:['Неримуван стих (бял стих)','Римуван с кръстосана рима','Римуван с двойна рима','Проза'], a:0, n:'Стиховете не се римуват: „Отмахна той завесите и тихо застана пред отворений прозорец.“', ch:'Анализ: стих' },
+  { t:'y', k:['konflikt'], q:'Кой е основният конфликт в поемата?', o:['Между твореца и съдбата: глухотата срещу волята за творчество','Между Бетховен и властта','Между двама композитори','Между Бетховен и семейството му'], a:0, n:'Съдбата „хлопа“ с глухотата. Духът на твореца отговаря с нови звукове.', ch:'Анализ: конфликт' },
+  { t:'y', k:['konflikt'], q:'Какъв е конфликтът според това къде се развива?', o:['Предимно вътрешен: в душата на Бетховен','Само външен: бой между хора','Конфликт между два народа','Няма конфликт'], a:0, n:'Борбата е между отчаянието и „всемогъщий дух“ в самия герой.', ch:'Анализ: конфликт' },
+  { t:'y', k:['uchenik','tolpa'], q:'Какъв втори конфликт показва сцената с ученика?', o:['Между гения и хората, които не разбират новото в изкуството','Между учителя и ученика за пари','Между двама ученици','Между Бетховен и публиката в театъра'], a:0, n:'Ученикът чува в новата музика „изблик на безумье“. Новото изкуство изпреварва своето време.', ch:'Анализ: конфликт' },
+  { t:'y', k:['tema'], q:'Коя е темата на поемата?', o:['Страданието на твореца и силата на изкуството','Любовта между двама млади','Войната и героизмът','Животът на село'], a:0, n:'Оглушалият композитор превръща страданието в ново творчество.', ch:'Анализ: тема' },
+  { t:'y', k:['kompoziciya'], q:'Как е изградена композицията на поемата?', o:['От отчаянието през обрата до възраждането и безсмъртието','От щастието към гибелта','Като спомен от детството','Като поредица от писма'], a:0, n:'Нощта и мракът, монологът на отчаянието, Омир и „Не! Не!“, новата творба, ученикът и гласът на съзнанието.', ch:'Анализ: композиция' },
+  { t:'g', k:['hronotop'], q:'Кога и къде се развива действието?', o:['За една лятна нощ, в стаята на Бетховен','За много години, в различни градове','През един зимен ден, в концертна зала','През една седмица, на път'], a:0, n:'Всичко става между прозореца и рояла в една нощ.', ch:'Анализ: време и място' },
+  { t:'g', k:['monolog'], q:'Как научаваме мислите на Бетховен?', o:['От вътрешния му монолог','От писмата му','От разказа на ученика','От вестник'], a:0, n:'„И в мрачния му ум злокобни мисли се зароиха“, а после чуваме думите му: „За мене всичко свършено е вече!“', ch:'Анализ: повествование' },
+  { t:'g', k:['sravnenie'], q:'Какво художествено средство е „тъй както искри изпод пепелта на току-що разровена жарава“?', o:['Сравнение','Олицетворение','Епитет','Хипербола'], a:0, n:'Мислите на Бетховен се сравняват с искри от разровена жарава.', ch:'Анализ: художествени средства' },
+  { t:'g', k:['ritorichni'], q:'Какво художествено средство са въпросите „В смъртта покой?! Дали не малодушье…“?', o:['Риторични въпроси','Обръщение към читателя','Диалог','Ирония'], a:0, n:'Бетховен не чака отговор: с въпросите той спори със себе си и започва обратът.', ch:'Анализ: художествени средства' },
+  { t:'g', k:['mit'], q:'Към кой мит препраща финалът на поемата?', o:['Към мита за Прометей','Към мита за Орфей','Към мита за Икар','Към мита за Сизиф'], a:0, n:'„Ти сне от небесата пламък Прометеев…“ Както Прометей дава огъня, така творецът дава изкуството.', ch:'Анализ: образи' },
+  { t:'y', k:['zvezdi'], q:'Какво означава погледът на Бетховен „в звездни небеса“?', o:['Обрат от мрака към висшето, към духа','Той чака сутринта','Той търси пътя към дома','Той се страхува от бурята'], a:0, n:'Преди това той не вижда нищо в ясната нощ. Сега вдига чело към звездите и отхвърля мисълта за смъртта.', ch:'Анализ: образи' },
+  { t:'y', k:['geroj'], q:'Какъв герой е Бетховен в поемата?', o:['Изключителна личност, която превъзмогва страданието','Обикновен човек, който се примирява','Смешен чудак','Злодей'], a:0, n:'Славейков обича да пише за велики личности. Тук геният побеждава съдбата чрез изкуството.', ch:'Анализ: образи' },
+  { t:'y', k:['moto'], q:'Защо поемата има мото?', o:['То подсказва основния конфликт: съдбата хлопа на вратата на твореца','То е посвещение на ученика','То превежда заглавието','То описва нощта'], a:0, n:'В поемата Бетховен мечтае за гроба, „на чиито двери няма съдбата ни да хлопа“.', ch:'Анализ: мото' },
+
+  // ---- Цитати (червени)
+  { t:'r', k:['moto'], quote:'„So pocht das Schicksal an die Pforte.“', q:'Какво означава мотото?', o:['„Така съдбата хлопа на портата“','„Така звучи нощта“','„Музиката е вечна“','„Съдбата е сляпа“'], a:0, n:'Думите се приписват на Бетховен. В поемата съдбата „хлопа“ чрез глухотата.', ch:'Мотото' },
+  { t:'r', k:['mrak'], quote:'„Нощта бе ясна, но злокобен мрак се сбираше Бетховену в душата…“', q:'Какво изразяват тези стихове?', o:['Контраста между светлия свят и мрака в героя','Буря, която наближава','Съня на Бетховен','Мислите на ученика'], a:0, n:'Затова той стои пред прозореца, но „нищо не съзре“.', ch:'Началото: нощта' },
+  { t:'r', k:['slepec'], quote:'„Слепецът няма слънцето да види.“', q:'С какво Бетховен сравнява глухотата си?', o:['Със слепотата','С нощта','С гроба','С тишината'], a:0, n:'„Слепец! За мен залязоха навеки на слънцето лучите — с звуковете на музиката…“', ch:'Монологът: отчаянието' },
+  { t:'r', k:['martvec'], quote:'„Аз доживях самичък да се видя мъртвец приживе.“', q:'Какво чувства Бетховен?', o:['Че е жив, но откъснат от живота','Че е болен и скоро ще умре','Че е остарял','Че е самотен в голямата къща'], a:0, n:'„Другите живеят с живота на творенията мои — и само ази зарад тях съм глух.“', ch:'Монологът: отчаянието' },
+  { t:'r', k:['chest'], quote:'„Творецът на хармонията — глух!“', q:'Кой се смее така на Бетховен?', o:['Призракът на неговата чест','Ученикът','Публиката','Съзнанието'], a:0, n:'„И призракът на мойта чест жестока ме неотстъпно навсъде преследва със своя злобен и ужасен смях…“', ch:'Монологът: отчаянието' },
+  { t:'r', k:['pokoj'], quote:'„Душа жаднее за покой — покой във гроба…“', q:'Какво желае Бетховен в отчаянието си?', o:['Смъртта','Почивка сред природата','Тишина за работа','Слава'], a:0, n:'В гроба съдбата няма „да хлопа, ни зове“.', ch:'Монологът: отчаянието' },
+  { t:'r', k:['malodushie'], quote:'„В смъртта покой?! Дали не малодушье за него с своя милкав глас ми шепне?…“', q:'Какво показват тези въпроси?', o:['Началото на обрата: той се съмнява в мисълта за смъртта','Решението му да умре','Разговор с ученика','Молитва към Бога'], a:0, n:'Бетховен вече гледа „в звездни небеса“, а не в мрака.', ch:'Обратът' },
+  { t:'r', k:['omir'], quote:'„Сляп бил си ти! И Омир бил е сляп…“', q:'Защо Бетховен си спомня Омир?', o:['Омир е велик творец въпреки слепотата','Омир е негов учител','Омир е писал за музика','Омир е бил глух'], a:0, n:'„…но в слепота от хилядите зрящи едничък само той е виждал ясно…“', ch:'Обратът: Омир' },
+  { t:'r', k:['pogled'], quote:'„Не из очите погледът излиза, а на душата из Света Светих.“', q:'Какво означават тези думи?', o:['Истинското виждане идва от душата','Очите са по-важни от душата','Бетховен ще ослепее','Само в храма човек вижда ясно'], a:0, n:'Света Светих е най-святото място в храма. Тук: най-дълбокото в душата.', ch:'Обратът: Омир' },
+  { t:'r', k:['duh'], quote:'„Не! Не! Живее всемогъщий дух — а с него аз в изкуството живея…“', q:'Какво става в този момент?', o:['Бетховен отхвърля отчаянието','Бетховен умира','Ученикът влиза в стаята','Бетховен затваря рояла'], a:0, n:'Това е върхът на обрата: от „всичко свършено е вече“ до „Живее всемогъщий дух“.', ch:'Възраждането' },
+  { t:'r', k:['stradanie'], quote:'„…за нови чувства нови звукове — изкуството чрез тях да обновя…“', q:'Какво иска да направи Бетховен?', o:['Да обнови изкуството','Да се откаже от музиката','Да пише стихове','Да учи нови ученици'], a:0, n:'Страданието не го спира, а му дава нови звукове.', ch:'Възраждането' },
+  { t:'r', k:['visota'], quote:'„Таз висота достигна, възродена в велика скръб, великата душа.“', q:'Откъде идва възраждането на Бетховен?', o:['От голямото страдание','От славата','От помощта на ученика','От съня'], a:0, n:'Великата душа се възражда точно чрез великата скръб.', ch:'Възраждането' },
+  { t:'r', k:['zabrava'], quote:'„…и се забрави, и забрави всичко…“', q:'Какво става с Бетховен, докато свири?', o:['Отдава се изцяло на творбата си','Заспива пред рояла','Забравя мелодията','Губи паметта си'], a:0, n:'Затова не забелязва ученика, който влиза тихо в стаята.', ch:'Възраждането' },
+  { t:'r', k:['lav'], quote:'„Рикание на гладен лъв в пустиня в тез звукове ехти.“', q:'Кой мисли така?', o:['Ученикът','Бетховен','Призракът на честта','Съзнанието'], a:0, n:'Ученикът е „сепнат от звуковете бурни на рояла“ и се пита: „Отде те идат?“', ch:'Ученикът' },
+  { t:'r', k:['bezumie'], quote:'„Това не е ли изблик на безумье?“', q:'Какво се пита ученикът?', o:['Дали новата музика на учителя не е лудост','Дали самият той не е полудял','Дали нощта не е твърде тъмна','Дали да си тръгне'], a:0, n:'Той не разбира, че учителят създава нов закон за хармонията.', ch:'Ученикът' },
+  { t:'r', k:['robshtesh'], quote:'„Ти на съдбата няма що да робщеш.“', q:'Кой говори тези думи на Бетховен?', o:['Тайното съзнание в душата му','Ученикът','Омир','Призракът на честта'], a:0, n:'Така говори „съзнанието тайно“ в душата на Бетховен, докато ученикът се съмнява.', ch:'Финалът: гласът на съзнанието' },
+  { t:'r', k:['prometej'], quote:'„Ти сне от небесата пламък Прометеев да го запалиш в хорските сърца…“', q:'Какво е „пламък Прометеев“ тук?', o:['Изкуството, което творецът дава на хората','Огънят в камината','Звездите на небето','Свещта на масата'], a:0, n:'Прометей дава огъня на хората. Бетховен им дава музиката.', ch:'Финалът: гласът на съзнанието' },
+  { t:'r', k:['bezsmartie'], quote:'„…ти ще живейш безсмъртен в смъртний мир.“', q:'С каква мисъл завършва поемата?', o:['Творецът е безсмъртен чрез творбите си','Всички хора са смъртни','Бетховен скоро ще умре','Музиката му ще бъде забравена'], a:0, n:'С тези думи завършва „Cis moll“: страданието води до безсмъртие.', ch:'Финалът: гласът на съзнанието' }
+];
+
+/* Свържи: по 4 двойки */
+const MATCHES = [
+  { k:['chest','bezumie','robshtesh'], title:'Свържете гласа с думите му', ch:'„Cis moll“', pairs:[
+    ['Бетховен в отчаянието','„За мене всичко свършено е вече!“'], ['Призракът на честта','„Творецът на хармонията — глух!“'], ['Ученикът','„Това не е ли изблик на безумье?“'], ['Съзнанието','„Ти на съдбата няма що да робщеш.“'] ] },
+  { k:['omir','prometej','zaglavie'], title:'Свържете името с мястото му в поемата', ch:'„Cis moll“', pairs:[
+    ['Омир','слепият поет, който „е виждал ясно“'], ['Прометей','донесъл небесния пламък на хората'], ['Бетховен','оглушалият творец на хармонията'], ['Cis moll','тоналността на „Лунната соната“'] ] },
+  { k:['mrak','visshsluh','pokoj'], title:'Свържете образа с това, което означава', ch:'„Cis moll“', pairs:[
+    ['мракът в душата','отчаянието на Бетховен'], ['Висшият Слух','вътрешният слух на твореца'], ['покоят в гроба','бягство от съдбата чрез смъртта'], ['пламъкът Прометеев','изкуството, дадено на хората'] ] },
+  { k:['sravnenie','ritorichni','mit'], title:'Свържете художественото средство с примера', ch:'Анализ: художествени средства', pairs:[
+    ['сравнение','„тъй както искри изпод пепелта“'], ['риторичен въпрос','„Дали не малодушье…“'], ['контраст','ясната нощ и мракът в душата'], ['препратка към мит','„пламък Прометеев“'] ] }
+];
+
+/* Подреди: елементите са в правилния ред */
+const ORDERS = [
+  { k:['prozorec','royal','tvorenie'], title:'Подредете събитията в поемата', ch:'„Cis moll“', items:[
+    'Бетховен застава пред отворения прозорец', 'Сяда пред рояла, но звуците прекъсват', 'Спомня си слепия Омир', 'Отново се захваща с творбата си', 'Ученикът влиза тихо в стаята' ] },
+  { k:['pokoj','malodushie','duh'], title:'Подредете пътя на Бетховен от отчаянието до безсмъртието', ch:'„Cis moll“', items:[
+    '„За мене всичко свършено е вече!“', '„Душа жаднее за покой — покой във гроба“', '„Дали не малодушье…“', '„Не! Не! Живее всемогъщий дух“', '„…ти ще живейш безсмъртен в смъртний мир.“' ] },
+  { k:['lav','robshtesh'], title:'Подредете гласовете по реда, в който звучат в поемата', ch:'„Cis moll“', items:[
+    'Бетховен: „Слепецът няма слънцето да види.“', 'Призракът на честта: „Творецът на хармонията — глух!“', 'Ученикът: „Рикание на гладен лъв в пустиня…“', 'Съзнанието: „Ти на съдбата няма що да робщеш.“' ] },
+  { k:['kompoziciya'], title:'Подредете частите на композицията', ch:'Анализ: композиция', items:[
+    'Лятната нощ и мракът в душата', 'Монологът на отчаянието', 'Обратът: Омир и „Не! Не!“', 'Новата творба и ученикът', 'Гласът на съзнанието: безсмъртие' ] }
+];
+
+/* Събития: move: полета (+/−), all: всички отбори, skip: пропуска ход, again: хвърля пак */
+const EVENTS = [
+  { title:'Съдбата хлопа', text:'Глухо чукане на портата. Пропускате следващия си ход.', fx:{ skip:1 } },
+  { title:'Ясна лятна нощ', text:'Звездите светят над всички. Всички отбори вървят напред.', fx:{ all:1 } },
+  { title:'Прекъснати звуци', text:'Ръцете падат от клавишите. Назад с 2.', fx:{ move:-2 } },
+  { title:'Злокобен мрак', text:'Мракът се сбира в душата. Всички отбори се връщат с едно поле.', fx:{ all:-1 } },
+  { title:'И Омир бил е сляп', text:'Слепият поет ви напомня, че душата вижда ясно. Вървите напред.', fx:{ move:2 } },
+  { title:'Нови звукове', text:'Намерихте нови звукове за нови чувства. Хвърлете зара още веднъж!', fx:{ again:1 } },
+  { title:'Геният отблъсна удара', text:'Сянката на смъртта отстъпва. Напред с 2.', fx:{ move:2 } },
+  { title:'Малодушие', text:'Мисълта за покой ви изкуши. Назад с 1.', fx:{ move:-1 } },
+  { title:'Ученикът се стряска', text:'„Това не е ли изблик на безумье?“ Назад с 1.', fx:{ move:-1 } },
+  { title:'Пламъкът Прометеев', text:'Запалихте огъня в хорските сърца. Напред с 1.', fx:{ move:1 } }
+];
+
+/* ===================================================================== */
+const TEAM_COLORS = ['var(--t1)','var(--t2)','var(--t3)','var(--t4)'];
+const TEAM_HEX = ['#d9483b','#4a86d6','#e6b93a','#63b86e'];
+const DEFAULT_NAMES = ['Отбор „Соната“','Отбор „Симфония“','Отбор „Увертюра“','Отбор „Фуга“'];
+const TYPE_INFO = {
+  g:{ name:'Факт', color:'var(--q-green)', hex:'#4f9d5d', plus:1, minus:-1 },
+  y:{ name:'Смисъл', color:'var(--q-yellow)', hex:'#e0b23a', plus:2, minus:-1 },
+  r:{ name:'Цитат', color:'var(--q-red)', hex:'#c8372d', plus:3, minus:-2 },
+  d:{ name:'Двубой', hex:'#e9dcc0' }, a:{ name:'Цялата класа', hex:'#e9dcc0' },
+  m:{ name:'Свържи', hex:'#e9dcc0' }, o:{ name:'Подреди', hex:'#e9dcc0' }, e:{ name:'Събитие', hex:'#e9dcc0' }
+};
+/* поле: 0 = старт, последното = „Безсмъртие“ */
+const CELLS = ['s','g','y','e','g','r','d','y','g','m','e','r','g','a','y','o','g','e','r','d','y','g','m','e','r','a','y','g','o','e','r','y','f'];
+const STATIONS = { 0:'Прозорецът', 5:'Роялът', 10:'Мрачни мисли', 15:'Звездите', 20:'Омир', 25:'Новата творба', 29:'Ученикът', 32:'Безсмъртие' };
+const LETTERS = ['А','Б','В','Г'];
+
+let S = null; // game state
+let timerId = null;
+let cellPts = [];
+
+const $ = (id) => document.getElementById(id);
+const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const signed = (n) => (n > 0 ? '+' + n : '−' + Math.abs(n));
+const fieldsWord = (n) => Math.abs(n) === 1 ? 'поле' : 'полета';
+
+/* ---------------- setup ---------------- */
+let setupCount = 3, setupTime = 30;
+function renderTeamInputs() {
+  const box = $('teamInputs');
+  const old = [...box.querySelectorAll('input')].map(i => i.value);
+  box.innerHTML = '';
+  for (let i = 0; i < setupCount; i++) {
+    const row = document.createElement('div');
+    row.className = 'team-row';
+    row.innerHTML = `<span class="flag-dot" style="background:${TEAM_COLORS[i]}"></span><input id="teamName${i}" type="text" maxlength="28" aria-label="Име на отбор ${i + 1}" value="${esc(old[i] ?? DEFAULT_NAMES[i])}">`;
+    box.appendChild(row);
+  }
+}
+function bindSeg(segId, attr, cb) {
+  $(segId).addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    $(segId).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    cb(Number(b.dataset[attr]));
+  });
+}
+bindSeg('countSeg', 'n', (n) => { setupCount = n; renderTeamInputs(); });
+bindSeg('timeSeg', 't', (t) => { setupTime = t; });
+renderTeamInputs();
+
+$('startBtn').addEventListener('click', () => {
+  const teams = [];
+  for (let i = 0; i < setupCount; i++) {
+    const v = ($('teamName' + i).value || '').trim();
+    teams.push({ name: v || DEFAULT_NAMES[i], pos: 0, skip: 0, joker: true, right: 0, asked: 0, color: i });
+  }
+  S = { teams, turn: 0, time: setupTime, phase: 'roll', used: { g:[], y:[], r:[], m:[], o:[], e:[] }, seen: [], log: ['Отборите тръгват от прозореца на Бетховен.'], winner: null, dice: 1 };
+  showGame();
+});
+
+/* ---------------- board ---------------- */
+function buildBoard() {
+  const svg = $('boardSvg');
+  const NS = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  // night sky: stars, a moon and a music staff in the background
+  const deco = document.createElementNS(NS, 'g');
+  deco.setAttribute('opacity', '0.6');
+  const stars = [[40,40],[120,90],[210,30],[300,70],[390,25],[560,60],[640,30],[720,95],[960,140],[990,40],[30,230],[110,400],[40,470],[420,470],[520,560],[600,470],[980,330],[950,480],[880,560],[260,590],[740,250],[600,170]];
+  stars.forEach(([x, y], i) => { const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', i % 3 ? 2 : 3.2); c.setAttribute('fill', '#e9e2c8'); deco.appendChild(c); });
+  const moon = document.createElementNS(NS, 'path');
+  moon.setAttribute('d', 'M745 150 a44 44 0 1 0 50 -50 a36 36 0 1 1 -50 50 Z');
+  moon.setAttribute('fill', '#e9e2c8'); moon.setAttribute('opacity', '0.8');
+  deco.appendChild(moon);
+  for (let k = 0; k < 5; k++) { const l = document.createElementNS(NS, 'path'); const y = 300 + k * 12; l.setAttribute('d', `M0 ${y} C150 ${y - 40} 260 ${y + 40} 420 ${y} S700 ${y + 60} 1000 ${y + 10}`); l.setAttribute('fill', 'none'); l.setAttribute('stroke', '#2f3c5c'); l.setAttribute('stroke-width', '2'); deco.appendChild(l); }
+  svg.appendChild(deco);
+
+  // the road
+  const roadD = 'M70 520 C200 560 330 500 330 420 S170 330 190 250 S330 120 470 150 S560 330 680 340 S900 300 890 200 S760 70 860 60';
+  const road = document.createElementNS(NS, 'path');
+  road.setAttribute('d', roadD); road.setAttribute('fill', 'none'); road.setAttribute('stroke', '#070a14'); road.setAttribute('stroke-width', '30'); road.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(road);
+  const road2 = road.cloneNode(); road2.setAttribute('stroke', '#4a5a82'); road2.setAttribute('stroke-width', '4'); road2.setAttribute('stroke-dasharray', '2 12');
+  svg.appendChild(road2);
+
+  const len = road.getTotalLength();
+  const n = CELLS.length;
+  cellPts = [];
+  for (let i = 0; i < n; i++) { const p = road.getPointAtLength(len * i / (n - 1)); cellPts.push({ x: p.x, y: p.y }); }
+
+  const cellsG = document.createElementNS(NS, 'g');
+  CELLS.forEach((t, i) => {
+    const { x, y } = cellPts[i];
+    const g = document.createElementNS(NS, 'g');
+    const big = (t === 's' || t === 'f');
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', big ? 30 : 22);
+    c.setAttribute('class', 'cell-circle');
+    c.setAttribute('fill', t === 's' ? '#efe6d2' : t === 'f' ? '#c8372d' : TYPE_INFO[t].hex);
+    g.appendChild(c);
+    g.appendChild(cellIcon(NS, t, x, y));
+    cellsG.appendChild(g);
+  });
+  svg.appendChild(cellsG);
+
+  // station labels
+  Object.entries(STATIONS).forEach(([i, label]) => {
+    i = Number(i);
+    const { x, y } = cellPts[i];
+    const above = !(i === 0 || i === 15);
+    const ty = above ? y - 44 : y + 52;
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', x); t.setAttribute('y', ty); t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'station-label');
+    t.textContent = label;
+    svg.appendChild(t);
+    const bb = t.getBBox();
+    const r = document.createElementNS(NS, 'rect');
+    r.setAttribute('x', bb.x - 8); r.setAttribute('y', bb.y - 3); r.setAttribute('width', bb.width + 16); r.setAttribute('height', bb.height + 6); r.setAttribute('rx', 5); r.setAttribute('class', 'station-bg');
+    svg.insertBefore(r, t);
+  });
+
+  const tokG = document.createElementNS(NS, 'g'); tokG.setAttribute('id', 'tokens');
+  S.teams.forEach((tm, k) => {
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'token'); g.setAttribute('id', 'tok' + k);
+    const c = document.createElementNS(NS, 'circle'); c.setAttribute('r', 15); c.setAttribute('fill', TEAM_HEX[tm.color]);
+    const tx = document.createElementNS(NS, 'text'); tx.textContent = String(k + 1);
+    g.appendChild(c); g.appendChild(tx); tokG.appendChild(g);
+  });
+  svg.appendChild(tokG);
+}
+function cellIcon(NS, t, x, y) {
+  if (t === 'd') { // crossed sabres
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('stroke', '#10201b'); g.setAttribute('stroke-width', '4'); g.setAttribute('stroke-linecap', 'round');
+    [['-9','-9','9','9'],['9','-9','-9','9']].forEach(([a,b,c,d]) => { const l = document.createElementNS(NS, 'line'); l.setAttribute('x1', x + Number(a)); l.setAttribute('y1', y + Number(b)); l.setAttribute('x2', x + Number(c)); l.setAttribute('y2', y + Number(d)); g.appendChild(l); });
+    return g;
+  }
+  if (t === 'a' || t === 'f') { // star
+    const pts = []; for (let k = 0; k < 10; k++) { const r = k % 2 ? 5 : (t === 'f' ? 15 : 11); const ang = -Math.PI / 2 + k * Math.PI / 5; pts.push((x + r * Math.cos(ang)).toFixed(1) + ',' + (y + r * Math.sin(ang)).toFixed(1)); }
+    const p = document.createElementNS(NS, 'polygon'); p.setAttribute('points', pts.join(' ')); p.setAttribute('fill', t === 'f' ? '#f3ead6' : '#10201b'); return p;
+  }
+  if (t === 'm') { // linked rings
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('fill', 'none'); g.setAttribute('stroke', '#10201b'); g.setAttribute('stroke-width', '3.5');
+    [-5, 5].forEach(dx => { const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', x + dx); c.setAttribute('cy', y); c.setAttribute('r', 7); g.appendChild(c); });
+    return g;
+  }
+  if (t === 'o') { // three steps
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('fill', '#10201b');
+    [[-10, 4, 6], [-3, -2, 12], [4, -8, 18]].forEach(([dx, dy, h]) => { const r = document.createElementNS(NS, 'rect'); r.setAttribute('x', x + dx); r.setAttribute('y', y + dy); r.setAttribute('width', 5); r.setAttribute('height', h - 6 + 6); g.appendChild(r); });
+    return g;
+  }
+  const tx = document.createElementNS(NS, 'text'); tx.setAttribute('x', x); tx.setAttribute('y', y + 1); tx.setAttribute('class', 'cell-icon');
+  tx.textContent = t === 'e' ? '!' : t === 'r' ? '„' : t === 's' ? '★' : '?';
+  if (t === 'r') tx.setAttribute('y', y - 4);
+  return tx;
+}
+function placeTokens() {
+  const groups = {};
+  S.teams.forEach((tm, k) => { (groups[tm.pos] = groups[tm.pos] || []).push(k); });
+  Object.entries(groups).forEach(([pos, ks]) => {
+    const p = cellPts[Number(pos)];
+    ks.forEach((k, j) => {
+      const off = ks.length === 1 ? { x: 0, y: -2 } : [{ x: -13, y: -13 }, { x: 13, y: -13 }, { x: -13, y: 13 }, { x: 13, y: 13 }][j];
+      const el = $('tok' + k);
+      el.style.transform = `translate(${p.x + off.x}px, ${p.y + off.y}px)`;
+      el.classList.toggle('active', k === S.turn && !S.winner);
+    });
+  });
+}
+
+/* ---------------- side panel ---------------- */
+function renderSide() {
+  const tm = S.teams[S.turn];
+  $('turnName').textContent = tm.name;
+  $('turnName').style.color = TEAM_COLORS[tm.color];
+  $('teamList').innerHTML = S.teams.map((t, k) => `
+    <div class="team-card ${k === S.turn ? 'active' : ''}">
+      <span class="bar" style="background:${TEAM_COLORS[t.color]}"></span>
+      <span><span class="nm">${k + 1}. ${esc(t.name)}</span>
+        <span class="meta"><span>верни: ${t.right}/${t.asked}</span>${t.joker ? '<span>Висшият слух: има</span>' : '<span>Висшият слух: използван</span>'}${t.skip ? '<span>пропуска ход</span>' : ''}</span></span>
+      <span class="pos" title="Поле">${t.pos}/${CELLS.length - 1}</span>
+    </div>`).join('');
+  $('log').innerHTML = S.log.slice(0, 7).map(l => `<li>${esc(l)}</li>`).join('');
+  $('dice').disabled = S.phase !== 'roll';
+  ['newBtn', 'rulesBtn'].forEach(id => { $(id).disabled = S.phase !== 'roll'; });
+  $('diceHint').textContent = S.phase === 'roll' ? 'Докоснете зара' : '';
+  drawDice(S.dice);
+  placeTokens();
+}
+function addLog(t) { S.log.unshift(t); if (S.log.length > 30) S.log.pop(); }
+function drawDice(n) {
+  const map = { 1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
+  const d = $('dice');
+  if (!d.children.length) for (let i = 0; i < 9; i++) { const s = document.createElement('span'); s.className = 'pip'; d.appendChild(s); }
+  [...d.children].forEach((p, i) => p.classList.toggle('on', map[n].includes(i)));
+  d.setAttribute('aria-label', 'Хвърли зара. Последно хвърляне: ' + n);
+}
+
+/* ---------------- turn flow ---------------- */
+function showGame() {
+  $('setup').hidden = true; $('game').hidden = false;
+  buildBoard(); renderSide();
+  // station labels are measured with the real font once it has loaded
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (S && !$('game').hidden) { buildBoard(); placeTokens(); } });
+  if (S.winner !== null && S.winner !== undefined) showWin();
+}
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait = (ms) => new Promise(r => setTimeout(r, reduceMotion ? Math.min(ms, 40) : ms));
+
+$('dice').addEventListener('click', async () => {
+  if (S.phase !== 'roll') return;
+  S.phase = 'moving'; renderSide();
+  const d = $('dice'); d.classList.add('rolling');
+  for (let i = 0; i < 6; i++) { drawDice(1 + Math.floor(Math.random() * 6)); await wait(80); }
+  d.classList.remove('rolling');
+  const n = 1 + Math.floor(Math.random() * 6);
+  S.dice = n; drawDice(n);
+  const tm = S.teams[S.turn];
+  addLog(`${tm.name} хвърли ${n}.`);
+  await stepMove(S.turn, n);
+  resolveCell();
+});
+async function stepMove(k, n) {
+  const tm = S.teams[k];
+  const last = CELLS.length - 1;
+  const dir = n > 0 ? 1 : -1;
+  for (let i = 0; i < Math.abs(n); i++) {
+    const next = tm.pos + dir;
+    if (next < 0 || next > last) break;
+    tm.pos = next; placeTokens(); await wait(230);
+  }
+  renderSide();
+}
+function moveNow(k, n) { // instant move after answers and events
+  const t = S.teams[k];
+  // a reward never carries a team onto „Безсмъртие“: the final cell is reached only with the dice
+  const cap = CELLS.length - 2;
+  if (n > 0) t.pos = Math.max(t.pos, Math.min(cap, t.pos + n));
+  else t.pos = Math.max(0, t.pos + n);
+}
+function nextTurn(again) {
+  closeCard();
+  if (S.winner !== null && S.winner !== undefined) return;
+  if (!again) {
+    let guard = 0;
+    do {
+      S.turn = (S.turn + 1) % S.teams.length;
+      const t = S.teams[S.turn];
+      if (t.skip > 0) { t.skip--; addLog(`${t.name} пропуска хода си.`); guard++; continue; }
+      break;
+    } while (guard < 10);
+  }
+  S.phase = 'roll';
+  renderSide();
+}
+function resolveCell() {
+  const tm = S.teams[S.turn];
+  const t = CELLS[tm.pos];
+  S.phase = 'card';
+  renderSide();
+  if (t === 'g' || t === 'y' || t === 'r') return askQuestion(t, false);
+  if (t === 'f') return askQuestion('r', true);
+  if (t === 'd') return S.teams.length > 1 ? pickDuel() : askQuestion('y', false);
+  if (t === 'a') return allClass();
+  if (t === 'm') return matchGame();
+  if (t === 'o') return orderGame();
+  if (t === 'e') return eventCard();
+  nextTurn();
+}
+// Never repeat a card while the deck has unused ones, and prefer cards whose topic (k) has not
+// come up yet in this game: „Кой блъска портата?“ and „Чорбаджи, отвори!“ ask about the same fact.
+function draw(kind, pool) {
+  if (!S.seen) S.seen = [];
+  const used = S.used[kind];
+  let idx = pool.map((_, i) => i).filter(i => !used.includes(i));
+  if (!idx.length) {
+    const last = used[used.length - 1];
+    S.used[kind] = [];
+    idx = pool.map((_, i) => i).filter(i => i !== last || pool.length === 1);
+  }
+  const clash = (i) => (pool[i].k || []).filter(t => S.seen.includes(t)).length;
+  const least = Math.min(...idx.map(clash));
+  idx = idx.filter(i => clash(i) === least);
+  const pick = idx[Math.floor(Math.random() * idx.length)];
+  S.used[kind].push(pick);
+  S.seen.push(...(pool[pick].k || []));
+  return pool[pick];
+}
+
+/* ---------------- card helpers ---------------- */
+function openCard(html) { $('card').innerHTML = html; $('overlay').hidden = false; const f = $('card').querySelector('button:not(:disabled)'); if (f) f.focus({ preventScroll: true }); }
+function closeCard() { stopTimer(); $('overlay').hidden = true; $('card').innerHTML = ''; }
+function headHtml(kindName, kindHex, team) {
+  const t = team ?? S.teams[S.turn];
+  return `<div class="card-head"><span class="kind"><i style="background:${kindHex}"></i>${kindName}</span>
+    <span class="who"><i style="background:${TEAM_COLORS[t.color]}"></i>${esc(t.name)}</span></div>`;
+}
+function startTimer(sec, onEnd) {
+  stopTimer();
+  const bar = $('card').querySelector('.timer');
+  if (!sec || !bar) { if (bar) bar.hidden = true; return; }
+  let left = sec;
+  const inner = bar.firstElementChild;
+  inner.style.width = '100%';
+  timerId = setInterval(() => {
+    left--;
+    inner.style.width = Math.max(0, left / sec * 100) + '%';
+    bar.classList.toggle('low', left <= 5);
+    if (left <= 0) { stopTimer(); onEnd(); }
+  }, 1000);
+}
+function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
+function verdictHtml(ok, title, note, ch, fxText) {
+  return `<div class="verdict"><span class="v-title ${ok ? 'ok' : 'bad'}">${title}</span>
+    ${note ? `<span class="v-note">${esc(note)}</span>` : ''}
+    ${ch ? `<span class="v-ch">${esc(ch)}</span>` : ''}
+    ${fxText ? `<span class="fx">${esc(fxText)}</span>` : ''}</div>`;
+}
+function optionsHtml(opts, prefix) {
+  return opts.map((o, i) => `<button type="button" class="opt" data-${prefix}="${i}"><span class="ltr">${LETTERS[i]}</span><span>${esc(o.text)}</span></button>`).join('');
+}
+function prepOptions(q) { return shuffle(q.o.map((text, i) => ({ text, ok: i === q.a }))); }
+function questionBody(q) {
+  return (q.quote ? `<div class="q-quote">${esc(q.quote)}</div><div class="q-sub">${esc(q.q)}</div>` : `<div class="q-text">${esc(q.q)}</div>`);
+}
+
+/* ---------------- question ---------------- */
+function askQuestion(type, isFinal) {
+  const pool = QUESTIONS.filter(x => x.t === type);
+  const q = draw(type, pool);
+  const opts = prepOptions(q);
+  const tm = S.teams[S.turn];
+  const info = TYPE_INFO[type];
+  const label = isFinal ? 'Финал · цитат' : info.name;
+  const rewardTxt = isFinal ? 'Вярно: победа · Грешно: назад с 3' : `Вярно: ${signed(info.plus)} · Грешно: ${signed(info.minus)}`;
+  openCard(`${headHtml(label, isFinal ? '#c8372d' : info.hex)}
+    ${questionBody(q)}
+    <div class="timer"><div></div></div>
+    <div class="options">${optionsHtml(opts, 'i')}</div>
+    <div class="card-foot"><span class="note" style="color:#5a5242;font-weight:700">${rewardTxt}</span>
+      <button type="button" class="btn-ghost" id="jokerBtn" ${tm.joker ? '' : 'disabled'}>Висшият слух</button></div>
+    <div id="after"></div>`);
+  let done = false;
+  const finish = (pickedIdx) => {
+    if (done) return; done = true; stopTimer();
+    const btns = [...$('card').querySelectorAll('.opt')];
+    btns.forEach((b, i) => { b.disabled = true; if (opts[i].ok) b.classList.add('correct'); });
+    const ok = pickedIdx !== null && opts[pickedIdx].ok;
+    if (pickedIdx !== null && !ok) btns[pickedIdx].classList.add('wrong');
+    $('jokerBtn').disabled = true;
+    tm.asked++; if (ok) tm.right++;
+    let fx = '';
+    if (isFinal) {
+      if (ok) { S.winner = S.turn; addLog(`${tm.name} стигна до безсмъртието!`); fx = 'Отборът стигна до безсмъртието!'; }
+      else { moveNow(S.turn, -3); fx = 'Назад с 3 полета.'; addLog(`${tm.name} не позна цитата на финала и се връща с 3.`); }
+    } else {
+      const delta = ok ? info.plus : info.minus;
+      moveNow(S.turn, delta);
+      fx = `${tm.name}: ${signed(delta)} ${fieldsWord(delta)}.`;
+      addLog(`${tm.name} ${ok ? 'отговори вярно' : 'сгреши'} (${info.name.toLowerCase()}): ${signed(delta)}.`);
+    }
+    const title = pickedIdx === null ? 'Времето изтече' : ok ? 'Вярно!' : 'Не е вярно';
+    $('after').innerHTML = verdictHtml(ok, title, q.n, q.ch, fx) + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">${S.winner !== null && S.winner !== undefined ? 'Към победата' : 'Продължи'}</button></div>`;
+    renderSide();
+    $('contBtn').focus({ preventScroll: true });
+    $('contBtn').addEventListener('click', () => { if (S.winner !== null && S.winner !== undefined) { closeCard(); showWin(); } else nextTurn(); });
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('card').querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => finish(Number(b.dataset.i))));
+  $('jokerBtn').addEventListener('click', () => {
+    if (!tm.joker || done) return;
+    tm.joker = false;
+    const wrong = opts.map((o, i) => o.ok ? -1 : i).filter(i => i >= 0);
+    shuffle(wrong).slice(0, 2).forEach(i => { const b = $('card').querySelectorAll('.opt')[i]; b.disabled = true; b.classList.add('gone'); });
+    $('jokerBtn').disabled = true;
+    addLog(`${tm.name} използва Висшия слух.`);
+    renderSide();
+  });
+  startTimer(S.time, () => finish(null));
+}
+
+/* ---------------- duel ---------------- */
+function pickDuel() {
+  const others = S.teams.map((t, k) => ({ t, k })).filter(x => x.k !== S.turn);
+  openCard(`${headHtml('Двубой', '#e9dcc0')}
+    <div class="q-text">Кого предизвиквате на двубой?</div>
+    <div class="q-sub">По един човек от двата отбора излиза на дъската. Всеки отговаря на своята половина. Кой пръв докосне верния отговор, печели.</div>
+    <div class="pick-row">${others.map(x => `<button type="button" data-k="${x.k}" style="background:${TEAM_HEX[x.t.color]}">${esc(x.t.name)}</button>`).join('')}</div>`);
+  $('card').querySelectorAll('.pick-row button').forEach(b => b.addEventListener('click', () => duel(Number(b.dataset.k))));
+}
+function duel(opp) {
+  const type = Math.random() < .5 ? 'g' : 'y';
+  const q = draw(type, QUESTIONS.filter(x => x.t === type));
+  const A = S.turn, B = opp;
+  const optsA = prepOptions(q), optsB = prepOptions(q);
+  const side = (k, opts, tag) => `<div class="duel-side" style="border-color:${TEAM_HEX[S.teams[k].color]}">
+      <h3><span>${esc(S.teams[k].name)}</span><span id="st${tag}"></span></h3>
+      <div class="options">${opts.map((o, i) => `<button type="button" class="opt" data-${tag}="${i}"><span class="ltr">${LETTERS[i]}</span><span>${esc(o.text)}</span></button>`).join('')}</div></div>`;
+  openCard(`${headHtml('Двубой', '#e9dcc0')}
+    ${questionBody(q)}
+    <div class="timer"><div></div></div>
+    <div class="duel">${side(A, optsA, 'a')}${side(B, optsB, 'b')}</div>
+    <div id="after"></div>`);
+  let done = false; const out = { a: false, b: false };
+  const end = (winnerTag) => {
+    if (done) return; done = true; stopTimer();
+    $('card').querySelectorAll('.opt').forEach(b => b.disabled = true);
+    [['a', optsA], ['b', optsB]].forEach(([tag, opts]) => $('card').querySelectorAll(`[data-${tag}]`).forEach((b, i) => { if (opts[i].ok) b.classList.add('correct'); }));
+    S.teams[A].asked++; S.teams[B].asked++;
+    let fx = 'Никой не позна. Никой не се мести.', ok = false;
+    if (winnerTag) {
+      ok = true;
+      const w = winnerTag === 'a' ? A : B, l = winnerTag === 'a' ? B : A;
+      S.teams[w].right++;
+      moveNow(w, 2); moveNow(l, -1);
+      fx = `${S.teams[w].name}: +2 полета. ${S.teams[l].name}: −1 поле.`;
+      addLog(`Двубой: ${S.teams[w].name} победи ${S.teams[l].name}.`);
+    } else addLog('Двубой без победител.');
+    $('after').innerHTML = verdictHtml(ok, winnerTag ? 'Двубоят е спечелен!' : 'Няма победител', q.n, q.ch, fx) + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`;
+    renderSide();
+    $('contBtn').addEventListener('click', () => nextTurn());
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  ['a', 'b'].forEach(tag => {
+    const opts = tag === 'a' ? optsA : optsB;
+    $('card').querySelectorAll(`[data-${tag}]`).forEach(b => b.addEventListener('click', () => {
+      if (done || out[tag]) return;
+      const i = Number(b.dataset[tag]);
+      if (opts[i].ok) { b.classList.add('correct'); end(tag); }
+      else {
+        b.classList.add('wrong'); out[tag] = true;
+        $('card').querySelectorAll(`[data-${tag}]`).forEach(x => x.disabled = true);
+        $('st' + tag).textContent = 'грешка';
+        if (out.a && out.b) end(null);
+      }
+    }));
+  });
+  startTimer(S.time, () => end(null));
+}
+
+/* ---------------- whole class ---------------- */
+function allClass() {
+  const type = Math.random() < .5 ? 'r' : 'y';
+  const q = draw(type, QUESTIONS.filter(x => x.t === type));
+  const opts = prepOptions(q);
+  openCard(`${headHtml('Цялата класа', '#e9dcc0')}
+    ${questionBody(q)}
+    <div class="q-sub">Отговаря всеки. Водещият отбелязва отбора, който пръв отговори вярно.</div>
+    <div class="timer"><div></div></div>
+    <div class="options">${opts.map((o, i) => `<div class="opt" data-i="${i}"><span class="ltr">${LETTERS[i]}</span><span>${esc(o.text)}</span></div>`).join('')}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="revealBtn">Покажи отговора</button></div>
+    <div id="after"></div>`);
+  const reveal = () => {
+    stopTimer();
+    $('card').querySelectorAll('.opt').forEach((b, i) => { if (opts[i].ok) b.classList.add('correct'); else b.classList.add('gone'); });
+    $('revealBtn').remove();
+    $('after').innerHTML = verdictHtml(true, 'Верният отговор', q.n, q.ch, '') +
+      `<div class="q-sub" style="margin-top:14px">Кой отбор отговори пръв вярно? (+1 поле)</div>
+       <div class="pick-row" style="margin-top:10px">${S.teams.map((t, k) => `<button type="button" data-k="${k}" style="background:${TEAM_HEX[t.color]}">${esc(t.name)}</button>`).join('')}
+       <button type="button" data-k="-1" style="background:#d9cdb2">Никой</button></div>`;
+    $('after').querySelectorAll('[data-k]').forEach(b => b.addEventListener('click', () => {
+      const k = Number(b.dataset.k);
+      if (k >= 0) { moveNow(k, 1); S.teams[k].right++; S.teams[k].asked++; addLog(`Цялата класа: ${S.teams[k].name} отговори пръв (+1).`); }
+      else addLog('Цялата класа: никой не позна.');
+      nextTurn();
+    }));
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('revealBtn').addEventListener('click', reveal);
+  startTimer(S.time, reveal);
+}
+
+/* ---------------- match ---------------- */
+function matchGame() {
+  const set = draw('m', MATCHES);
+  const left = set.pairs.map((p, i) => ({ text: p[0], id: i }));
+  const right = shuffle(set.pairs.map((p, i) => ({ text: p[1], id: i })));
+  const tm = S.teams[S.turn];
+  const tagColors = ['#7a5a1f', '#2f6f8a', '#8a2f5a', '#3d7a3a'];
+  const links = {}; // leftId -> rightIndex
+  let selL = null;
+  openCard(`${headHtml('Свържи', '#e9dcc0')}
+    <div class="q-text">${esc(set.title)}</div>
+    <div class="q-sub">Докоснете ляво, после дясно. ${S.time ? (S.time + 15) + ' секунди.' : ''} Всичко вярно: +2, три верни: +1.</div>
+    <div class="timer"><div></div></div>
+    <div class="match"><div class="col" id="colL">${left.map((x, i) => `<button type="button" class="m-item" data-l="${i}"><span class="tag" id="tl${i}"></span><span>${esc(x.text)}</span></button>`).join('')}</div>
+      <div class="col" id="colR">${right.map((x, i) => `<button type="button" class="m-item" data-r="${i}"><span class="tag" id="tr${i}"></span><span>${esc(x.text)}</span></button>`).join('')}</div></div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="checkBtn">Провери</button></div>
+    <div id="after"></div>`);
+  const paint = () => {
+    left.forEach((_, i) => { const tg = $('tl' + i); tg.textContent = ''; tg.style.background = '#b8ad93'; });
+    right.forEach((_, i) => { const tg = $('tr' + i); tg.textContent = ''; tg.style.background = '#b8ad93'; });
+    Object.entries(links).forEach(([l, r], n) => { const c = tagColors[Number(l) % 4]; [$('tl' + l), $('tr' + r)].forEach(tg => { tg.textContent = LETTERS[Number(l)]; tg.style.background = c; }); });
+    $('card').querySelectorAll('[data-l]').forEach(b => b.classList.toggle('sel', Number(b.dataset.l) === selL));
+  };
+  let done = false;
+  $('card').querySelectorAll('[data-l]').forEach(b => b.addEventListener('click', () => { if (done) return; selL = Number(b.dataset.l); paint(); }));
+  $('card').querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => {
+    if (done || selL === null) return;
+    const r = Number(b.dataset.r);
+    Object.keys(links).forEach(l => { if (links[l] === r) delete links[l]; });
+    links[selL] = r; selL = null; paint();
+  }));
+  const check = () => {
+    if (done) return; done = true; stopTimer();
+    let good = 0;
+    left.forEach((x, i) => {
+      const r = links[i];
+      const ok = r !== undefined && right[r].id === x.id;
+      if (ok) good++;
+      $('card').querySelector(`[data-l="${i}"]`).classList.add(ok ? 'ok' : 'bad');
+    });
+    $('card').querySelectorAll('.m-item').forEach(b => b.disabled = true);
+    const delta = good === 4 ? 2 : good === 3 ? 1 : 0;
+    if (delta) moveNow(S.turn, delta);
+    tm.asked++; if (good === 4) tm.right++;
+    addLog(`${tm.name}: свържи: ${good} от 4 (${delta ? signed(delta) : '0'}).`);
+    const correct = set.pairs.map(p => `${p[0]} → ${p[1]}`).join(' · ');
+    $('after').innerHTML = verdictHtml(good >= 3, `Верни двойки: ${good} от 4`, correct, set.ch, delta ? `${tm.name}: ${signed(delta)} ${fieldsWord(delta)}.` : 'Без промяна.') + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`;
+    $('checkBtn').remove();
+    renderSide();
+    $('contBtn').addEventListener('click', () => nextTurn());
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('checkBtn').addEventListener('click', check);
+  startTimer(S.time ? S.time + 15 : 0, check);
+}
+
+/* ---------------- order ---------------- */
+function orderGame() {
+  const set = draw('o', ORDERS);
+  const items = shuffle(set.items.map((text, i) => ({ text, i })));
+  const tm = S.teams[S.turn];
+  const picked = []; // indices into items
+  openCard(`${headHtml('Подреди', '#e9dcc0')}
+    <div class="q-text">${esc(set.title)}</div>
+    <div class="q-sub">Докоснете ги поред: първото, второто… Докосване отново отменя. Всичко вярно: +2.</div>
+    <div class="timer"><div></div></div>
+    <div class="order-list">${items.map((x, k) => `<button type="button" class="m-item" data-o="${k}"><span class="num" id="on${k}"></span><span>${esc(x.text)}</span></button>`).join('')}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="checkBtn">Провери</button></div>
+    <div id="after"></div>`);
+  let done = false;
+  const paint = () => items.forEach((_, k) => { const n = picked.indexOf(k); const el = $('on' + k); el.textContent = n >= 0 ? n + 1 : ''; el.classList.toggle('set', n >= 0); });
+  $('card').querySelectorAll('[data-o]').forEach(b => b.addEventListener('click', () => {
+    if (done) return;
+    const k = Number(b.dataset.o); const at = picked.indexOf(k);
+    if (at >= 0) picked.splice(at); else picked.push(k);
+    paint();
+  }));
+  const check = () => {
+    if (done) return; done = true; stopTimer();
+    const ok = picked.length === items.length && picked.every((k, n) => items[k].i === n);
+    items.forEach((x, k) => { const n = picked.indexOf(k); $('card').querySelector(`[data-o="${k}"]`).classList.add(n === x.i ? 'ok' : 'bad'); });
+    $('card').querySelectorAll('.m-item').forEach(b => b.disabled = true);
+    tm.asked++; if (ok) { tm.right++; moveNow(S.turn, 2); }
+    addLog(`${tm.name}: подреди: ${ok ? 'вярно (+2)' : 'невярно'}.`);
+    $('after').innerHTML = verdictHtml(ok, ok ? 'Редът е верен!' : 'Редът не е верен', 'Верният ред: ' + set.items.map((t, n) => `${n + 1}. ${t}`).join('  '), set.ch, ok ? `${tm.name}: +2 полета.` : 'Без промяна.') + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`;
+    $('checkBtn').remove();
+    renderSide();
+    $('contBtn').addEventListener('click', () => nextTurn());
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('checkBtn').addEventListener('click', check);
+  startTimer(S.time ? S.time + 15 : 0, check);
+}
+
+/* ---------------- event ---------------- */
+function eventCard() {
+  const ev = draw('e', EVENTS);
+  const tm = S.teams[S.turn];
+  let fx = '', again = false;
+  if (ev.fx.move) { moveNow(S.turn, ev.fx.move); fx = `${tm.name}: ${signed(ev.fx.move)} ${fieldsWord(ev.fx.move)}.`; }
+  if (ev.fx.all) { S.teams.forEach((_, k) => moveNow(k, ev.fx.all)); fx = `Всички отбори: ${signed(ev.fx.all)} ${fieldsWord(ev.fx.all)}.`; }
+  if (ev.fx.skip) { tm.skip += ev.fx.skip; fx = `${tm.name} пропуска следващия си ход.`; }
+  if (ev.fx.again) { again = true; fx = `${tm.name} хвърля зара още веднъж.`; }
+  addLog(`Събитие „${ev.title}“: ${fx}`);
+  openCard(`${headHtml('Събитие', '#e9dcc0')}
+    <div class="event-title">${esc(ev.title)}</div>
+    <div class="event-text">${esc(ev.text)}</div>
+    <div class="fx">${esc(fx)}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`);
+  renderSide();
+  $('contBtn').addEventListener('click', () => nextTurn(again));
+}
+
+/* ---------------- win ---------------- */
+function showWin() {
+  const w = S.teams[S.winner];
+  const rows = S.teams.slice().sort((a, b) => b.pos - a.pos || b.right - a.right)
+    .map(t => `<div><span>${esc(t.name)}</span><span>поле ${t.pos} · верни ${t.right}/${t.asked}</span></div>`).join('');
+  openCard(`<div class="card-head"><span class="kind"><i style="background:${TEAM_HEX[w.color]}"></i>Край на играта</span></div>
+    <div class="win-title">${esc(w.name)} стигна до безсмъртието!</div>
+    <div class="stats">${rows}</div>
+    <div class="card-foot"><span class="q-sub">Прочетете отново местата от поемата, в които сгрешихте.</span>
+      <button type="button" class="btn-dark" id="againBtn">Нова игра</button></div>`);
+  renderSide();
+  $('againBtn').addEventListener('click', newGame);
+}
+function newGame() { closeCard(); S = null; $('game').hidden = true; $('setup').hidden = false; }
+
+/* ---------------- top tools ---------------- */
+$('newBtn').addEventListener('click', () => {
+  openCard(`<div class="card-head"><span class="kind">Нова игра</span></div>
+    <div class="q-text">Да започнем ли нова игра? Сегашната ще бъде загубена.</div>
+    <div class="card-foot"><button type="button" class="btn-ghost" id="noBtn">Не, продължаваме</button><button type="button" class="btn-dark" id="yesBtn">Да, нова игра</button></div>`);
+  $('noBtn').addEventListener('click', () => { closeCard(); renderSide(); });
+  $('yesBtn').addEventListener('click', newGame);
+});
+$('rulesBtn').addEventListener('click', () => {
+  const rules = document.querySelector('.rules').outerHTML;
+  openCard(`<div class="card-head"><span class="kind">Правила</span></div>
+    <div style="color:#1d1a14">${rules}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="closeRules">Затвори</button></div>`);
+  $('card').querySelectorAll('.rules b').forEach(b => b.style.color = '#7f1f19');
+  $('card').querySelector('.rules').style.color = '#1d1a14';
+  $('closeRules').addEventListener('click', () => { closeCard(); renderSide(); });
+});
+$('fsBtn').addEventListener('click', async () => {
+  try {
+    if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+    else await document.exitFullscreen();
+  } catch (e) { $('fsBtn').textContent = 'Цял екран не е наличен'; }
+});
+
+/* keep the game when the page is updated while open */
+function boot(data) {
+  if (data && data.state) { S = data.state; S.phase = 'roll'; showGame(); }
+}
+boot({});
+</script>
+</body>
+</html>
