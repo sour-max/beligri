@@ -197,18 +197,19 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 [hidden] { display: none !important; }
 body { margin: 0; }
 /* site logo, same as on beligri.org pages */
-.logo { justify-self: start; display: inline-flex; align-items: center; gap: 12px; color: var(--linen); text-decoration: none; margin-bottom: 8px; }
-.logo-mark { position: relative; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: var(--brass); color: var(--ink); font-family: var(--font-display); font-size: 29px; line-height: 1; padding-top: 3px; transform: rotate(-6deg); box-shadow: 0 4px 0 #a87a26; transition: transform .2s; }
-.logo-mark::after { content: ""; position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--flag); }
-.logo:hover .logo-mark { transform: rotate(6deg); }
-.logo-word { font-family: var(--font-display); font-size: 1.2rem; }
+.logo { justify-self: start; display: inline-flex; align-items: center; gap: 10px; color: var(--linen); text-decoration: none; margin-bottom: 10px; }
+.logo-mark { width: 36px; height: 36px; flex: none; transition: transform .35s cubic-bezier(.3,1.6,.5,1); }
+.logo:hover .logo-mark { transform: rotate(90deg); }
+.logo-word { font-size: 1.3rem; line-height: 1; }
+.logo-word b { font-family: var(--font-display); font-weight: 400; color: #e2584a; }
+.logo-word i { font-family: var(--font-text); font-weight: 700; }
 </style>
 </head>
 <body>
 <!-- ============ SETUP ============ -->
 <section id="setup">
   <div class="title-block">
-    <a class="logo" href="/" aria-label="БЕЛ игри, към началото"><span class="logo-mark" aria-hidden="true">Б</span><span class="logo-word">БЕЛ игри</span></a>
+    <a class="logo" href="/" aria-label="БЕЛ игри, към началото"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="7" width="26" height="26" rx="4" transform="rotate(45 20 20)" fill="#c8372d"/><g fill="#efe6d2"><rect x="18" y="18" width="4" height="4" transform="rotate(45 20 20)"/><rect x="18" y="8" width="4" height="4" transform="rotate(45 20 10)"/><rect x="18" y="28" width="4" height="4" transform="rotate(45 20 30)"/><rect x="8" y="18" width="4" height="4" transform="rotate(45 10 20)"/><rect x="28" y="18" width="4" height="4" transform="rotate(45 30 20)"/></g></svg><span class="logo-word"><b>БЕЛ</b> <i>игри</i></span></a>
     <span class="eyebrow">Игра по „Бай Ганьо се върна от Европа“ · 10. клас</span>
     <h1>Депутацията</h1>
     <p>„Бай Ганьо“ на Алеко Константинов е цикъл от отделни разкази, които свързва един герой: бай Ганьо. Тази игра е по разказа „Бай Ганьо се върна от Европа“, с няколко въпроса и за целия цикъл. Класът се разделя на депутации. Те тръгват от Искърските ханчета и с верни отговори стигат до двореца на княза.</p>

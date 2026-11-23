@@ -6,19 +6,17 @@
 
 ```
 index.html          начална страница: готовите игри и предстоящите
-site.css            стилове на сайта: тъмнозелен фон, месингови акценти (игрите имат свои стилове)
+site.css            стилове на сайта: „читанка“ — хартия, черно мастило, червено като шевица (игрите имат свои стилове)
 404.html            страница „няма такава страница“
-favicon.svg         лого: месингова плочка с буквата „Б“ и червена точка като на зар
-img/                снимки на игралните полета (сега не се показват на сайта)
+favicon.svg         лого: страната „пет“ на зар, завъртяна като ромб, като мотив от шевица
+img/                картинки за страниците (снимка на игралното поле)
 pod-igoto/index.html  „Пътят към свободата“ по „Под игото“ → beligri.org/pod-igoto/
 bai-ganyo/index.html  „Депутацията“ по „Бай Ганьо се върна от Европа“ → beligri.org/bai-ganyo/
-cis-moll/index.html   „Съдбата хлопа“ по „Cis moll“ → beligri.org/cis-moll/
 nvo/index.html        как игрите помагат за НВО (новият формат от 2027 г.)
 za-nas/index.html     за нас
 za-uchitelya/index.html  за учителя: как се провежда игра за ~15 минути от часа, връзка към PDF
 pod-igoto/otgovori.pdf   отговори за учителя (генерират се със скрипт, вж. по-долу)
 bai-ganyo/otgovori.pdf   същото за „Бай Ганьо“
-cis-moll/otgovori.pdf    същото за „Cis moll“
 tools/answer-key.js   генератор на PDF с отговорите от данните на играта
 functions/_middleware.js  пренасочване www → beligri.org
 ```
@@ -28,7 +26,7 @@ functions/_middleware.js  пренасочване www → beligri.org
 1. Създайте папка с името на произведението на латиница, например `bay-ganyo/`, и сложете в нея `index.html` на играта.
 2. На началната страница (`index.html`) преместете произведението от „Предстоят“ в „Готови игри“: копирайте блока `<li>` с `game-card` и сменете адреса, заглавието и описанието.
 3. На страницата „За учителя“ (`za-uchitelya/index.html`) добавете карта с PDF на отговорите, най-новата отгоре.
-4. В началото на страницата на играта сложете логото с връзка към началната страница (`<a class="logo" href="/">` с плочката „Б“ и стиловете му), както в `pod-igoto/index.html`.
+4. В началото на страницата на играта сложете логото с връзка към началната страница (`<a class="logo" href="/">` и стиловете му), както в `pod-igoto/index.html`.
 
 Най-лесно е да копирате папката на предишна игра и да смените данните: въпросите, „Свържи“, „Подреди“, събитията, спирките на полето, имената на отборите и подсказките. Така `bai-ganyo/` е направена от `pod-igoto/`.
 
@@ -41,7 +39,6 @@ functions/_middleware.js  пренасочване www → beligri.org
 ```
 node tools/answer-key.js pod-igoto "„Под игото“" "Пътят към свободата"
 node tools/answer-key.js bai-ganyo "„Бай Ганьо се върна от Европа“" "Депутацията" разказа
-node tools/answer-key.js cis-moll "„Cis moll“" "Съдбата хлопа" поемата
 ```
 
 Последният аргумент казва какъв е текстът („романа“ по подразбиране, „разказа“ и т.н.) и влиза в заглавието на PDF.
@@ -64,7 +61,7 @@ Cloudflare Pages, проект `beligri` (адрес по подразбиран
 
 ```
 mkdir -p /tmp/beligri-dist
-git archive HEAD -- index.html site.css 404.html favicon.svg img pod-igoto bai-ganyo cis-moll nvo za-nas za-uchitelya | tar -x -C /tmp/beligri-dist
+git archive HEAD -- index.html site.css 404.html favicon.svg img pod-igoto bai-ganyo nvo za-nas za-uchitelya | tar -x -C /tmp/beligri-dist
 npx wrangler pages deploy /tmp/beligri-dist --project-name beligri --branch main
 ```
 
