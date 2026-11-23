@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Апостол Левски · „Левски“</title>
+<meta name="description" content="Игра за класа по одата „Левски“ на Иван Вазов: комитети, зар, въпроси и цитати. 10. клас.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ruslan+Display&family=Alegreya:ital,wght@0,500;0,700;1,500&family=Alegreya+Sans:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: one-screen game for a classroom board. Map on the left, teams on the right, cards open over the map. */
+:root {
+  --ink: #1f1207;          /* dark burnt orange */
+  --panel: #2f1c0c;
+  --panel-2: #3b2511;
+  --line: #5e3c1b;
+  --linen: #efe6d2;        /* text */
+  --muted: #cdb092;
+  --brass: #f0902c;        /* accent: orange of embers and the lion flag fringe */
+  --flag: #c8372d;
+  --q-green: #4f9d5d;
+  --q-yellow: #e0b23a;
+  --q-red: #c8372d;
+  --ok: #5fbf72;
+  --bad: #e2584a;
+  --font-display: "Ruslan Display", "Alegreya", Georgia, serif;
+  --font-text: "Alegreya", Georgia, "Times New Roman", serif;
+  --font-ui: "Alegreya Sans", "Segoe UI", Arial, sans-serif;
+  --t1: #d9483b; --t2: #4a86d6; --t3: #e6b93a; --t4: #63b86e;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: radial-gradient(ellipse at 30% 20%, #4a2a0e 0%, var(--ink) 60%) fixed, var(--ink);
+  color: var(--linen);
+  font-family: var(--font-ui);
+  font-size: clamp(15px, 1.15vw, 20px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+*, *::before, *::after { box-sizing: border-box; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+
+/* ---------- setup ---------- */
+#setup { max-width: 1360px; margin: 0 auto; display: grid; gap: 22px; padding-block: 12px; }
+.title-block { display: grid; gap: 10px; }
+.title-block .eyebrow { font-family: var(--font-ui); text-transform: uppercase; letter-spacing: .14em; color: var(--brass); font-weight: 700; font-size: .85em; }
+.title-block h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.2rem, 4.4vw, 4.2rem); line-height: 1; color: var(--linen); }
+.title-block p { font-family: var(--font-text); font-size: 1.15em; color: var(--muted); max-width: 90ch; margin: 0; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 24px; align-items: start; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.box h2 { font-family: var(--font-ui); font-size: 1em; text-transform: uppercase; letter-spacing: .12em; color: var(--brass); }
+.seg { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg button { padding: 10px 18px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); font-weight: 700; min-width: 64px; }
+.seg button[aria-pressed="true"] { background: var(--brass); color: #1b1407; border-color: var(--brass); }
+.team-inputs { display: grid; gap: 10px; }
+.team-row { display: flex; align-items: center; gap: 10px; }
+.team-row .flag-dot { width: 22px; height: 22px; border-radius: 50%; flex: none; border: 2px solid rgba(0,0,0,.35); }
+.team-row input { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--ink); color: var(--linen); font: inherit; font-weight: 700; }
+.rules { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; font-size: .95em; color: var(--linen); }
+.rules li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; }
+.rules .chip { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: .8em; color: #10201b; }
+.rules b { color: var(--brass); font-weight: 700; }
+.primary { background: var(--flag); color: #fff6ea; border: 0; border-radius: 10px; padding: 16px 28px; font-weight: 800; font-size: 1.2em; letter-spacing: .02em; box-shadow: 0 6px 0 #7f1f19; transition: transform .1s, box-shadow .1s; }
+.primary:active { transform: translateY(4px); box-shadow: 0 2px 0 #7f1f19; }
+.secondary { background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px; font-weight: 700; color: var(--linen); }
+.start-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.note { color: var(--muted); font-size: .9em; }
+
+/* ---------- game ---------- */
+#game { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) clamp(260px, 22vw, 360px); gap: 16px; }
+.board-wrap { min-width: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 8px; min-height: 0; }
+.topbar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.topbar h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.4rem, 2.4vw, 2.3rem); }
+.topbar .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+.board { min-height: 0; display: grid; place-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.board svg { width: 100%; height: 100%; max-height: 100%; display: block; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .85em; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+
+.side { display: grid; grid-template-rows: auto auto 1fr; gap: 12px; min-height: 0; min-width: 0; }
+.turn-box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; justify-items: center; text-align: center; }
+.turn-label { font-size: .8em; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
+.turn-name { font-family: var(--font-text); font-weight: 700; font-size: 1.5em; line-height: 1.1; }
+.dice { width: 112px; height: 112px; border-radius: 18px; background: #f3ead6; border: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 16px; box-shadow: 0 7px 0 #b7a986, 0 10px 24px rgba(0,0,0,.4); transition: transform .1s; }
+.dice:active { transform: translateY(4px); box-shadow: 0 3px 0 #b7a986; }
+.dice:disabled { opacity: .45; cursor: default; }
+.dice .pip { width: 18px; height: 18px; border-radius: 50%; background: #1d1a14; place-self: center; visibility: hidden; }
+.dice .pip.on { visibility: visible; }
+.dice.rolling { animation: shake .5s linear; }
+@keyframes shake { 0%{transform:rotate(0)} 25%{transform:rotate(-14deg)} 50%{transform:rotate(12deg)} 75%{transform:rotate(-8deg)} 100%{transform:rotate(0)} }
+.dice-hint { font-size: .9em; color: var(--muted); min-height: 1.3em; }
+
+.teams { display: grid; gap: 8px; }
+.team-card { display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.team-card.active { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.team-card .bar { width: 14px; height: 100%; min-height: 34px; border-radius: 4px; }
+.team-card .nm { font-weight: 700; line-height: 1.15; min-width: 0; overflow-wrap: anywhere; }
+.team-card .meta { font-size: .8em; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+.team-card .pos { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.2em; color: var(--brass); }
+.log { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; overflow: auto; min-height: 80px; }
+.log h3 { font-size: .8em; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); margin-bottom: 6px; }
+.log ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: .9em; }
+.log li:first-child { color: var(--linen); }
+.log li { color: var(--muted); }
+
+/* svg pieces */
+.cell-circle { stroke: #0b1512; stroke-width: 3; }
+.cell-icon { fill: #10201b; font-family: var(--font-ui); font-weight: 800; font-size: 22px; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.station-label { font-family: var(--font-ui); font-weight: 700; font-size: 17px; letter-spacing: .08em; text-transform: uppercase; fill: var(--linen); }
+.station-bg { fill: var(--ink); opacity: .82; }
+.token { transition: transform .22s ease-out; }
+.token circle { stroke: #0b1512; stroke-width: 3; }
+.token text { font-family: var(--font-ui); font-weight: 800; font-size: 16px; fill: #0b1512; text-anchor: middle; dominant-baseline: central; }
+.token.active circle { stroke: #fff6ea; stroke-width: 4; }
+
+/* ---------- overlay card ---------- */
+.overlay { position: fixed; inset: 0; background: rgba(6, 12, 10, .78); display: grid; place-items: center; padding: 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); z-index: 20; overflow: auto; }
+.card { width: min(1200px, 100%); background: #f3ead6; color: #1d1a14; border-radius: 14px; padding: clamp(18px, 2.4vw, 40px); display: grid; gap: clamp(14px, 1.6vw, 24px); box-shadow: 0 20px 60px rgba(0,0,0,.55); position: relative; }
+.card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kind { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; font-size: .9em; }
+.kind i { width: 18px; height: 18px; border-radius: 50%; display: inline-block; }
+.who { font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
+.who i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+.q-text { font-family: var(--font-text); font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 2.6rem); line-height: 1.2; text-wrap: balance; }
+.q-quote { font-family: var(--font-text); font-style: italic; font-weight: 500; font-size: clamp(1.5rem, 2.8vw, 2.8rem); line-height: 1.25; border-left: 6px solid var(--q-red); padding-left: .6em; }
+.q-sub { font-weight: 700; color: #5a5242; font-size: 1.1em; }
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.opt { text-align: left; background: #fffaf0; border: 2px solid #d9cdb2; border-radius: 12px; padding: 18px 20px; font-size: clamp(1.05rem, 1.7vw, 1.6rem); font-weight: 700; color: #1d1a14; display: flex; gap: 14px; align-items: center; min-height: 76px; }
+.opt .ltr { width: 40px; height: 40px; border-radius: 50%; background: #1d1a14; color: #f3ead6; display: grid; place-items: center; flex: none; font-size: .85em; }
+.opt:hover:not(:disabled) { border-color: #1d1a14; }
+.opt:disabled { cursor: default; }
+.opt.correct { background: #d7efd9; border-color: #2f8a44; }
+.opt.wrong { background: #f6d3cd; border-color: #b23a2c; }
+.opt.gone { opacity: .25; }
+.timer { height: 10px; background: #e2d7bd; border-radius: 6px; overflow: hidden; }
+.timer > div { height: 100%; background: #1d1a14; width: 100%; transition: width 1s linear; }
+.timer.low > div { background: var(--q-red); }
+.card-foot { display: flex; gap: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.btn-dark { background: #1d1a14; color: #f3ead6; border: 0; border-radius: 10px; padding: 14px 26px; font-weight: 800; font-size: 1.1em; }
+.btn-ghost { background: transparent; color: #1d1a14; border: 2px solid #1d1a14; border-radius: 10px; padding: 12px 20px; font-weight: 800; }
+.btn-ghost:disabled { opacity: .35; cursor: default; }
+.verdict { display: grid; gap: 8px; background: #fffaf0; border-radius: 12px; padding: 16px 20px; border: 2px solid #d9cdb2; }
+.verdict .v-title { font-weight: 800; font-size: 1.3em; }
+.verdict .v-title.ok { color: #2f8a44; }
+.verdict .v-title.bad { color: #b23a2c; }
+.verdict .v-note { font-family: var(--font-text); font-size: 1.15em; line-height: 1.4; }
+.verdict .v-ch { font-size: .9em; color: #6b624f; font-weight: 700; }
+
+/* duel */
+.duel { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.duel-side { border-radius: 12px; padding: 14px; display: grid; gap: 10px; border: 4px solid; background: #fffaf0; }
+.duel-side h3 { font-size: 1.1em; display: flex; justify-content: space-between; gap: 8px; }
+.duel-side .options { grid-template-columns: 1fr; gap: 10px; }
+.duel-side .opt { min-height: 60px; padding: 12px 14px; font-size: clamp(1rem, 1.4vw, 1.35rem); }
+.pick-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.pick-row button { border: 0; border-radius: 10px; padding: 16px 22px; font-weight: 800; font-size: 1.1em; color: #10201b; }
+
+/* match & order */
+.match { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+.match .col { display: grid; gap: 12px; align-content: start; }
+.m-item { background: #fffaf0; border: 2px solid #d9cdb2; border-radius: 12px; padding: 14px 16px; font-weight: 700; font-size: clamp(1rem, 1.5vw, 1.4rem); text-align: left; min-height: 64px; display: flex; align-items: center; gap: 12px; color: #1d1a14; }
+.m-item .tag { width: 30px; height: 30px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: .8em; color: #fff; background: #b8ad93; }
+.m-item.sel { border-color: #1d1a14; box-shadow: 0 0 0 3px #1d1a14 inset; }
+.m-item.ok { background: #d7efd9; border-color: #2f8a44; }
+.m-item.bad { background: #f6d3cd; border-color: #b23a2c; }
+.order-list { display: grid; gap: 12px; }
+.m-item .num { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; background: #e2d7bd; color: #1d1a14; font-weight: 800; }
+.m-item .num.set { background: #1d1a14; color: #f3ead6; }
+
+/* event & win */
+.event-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 3.6vw, 3.4rem); line-height: 1.05; }
+.event-text { font-family: var(--font-text); font-size: clamp(1.2rem, 2vw, 1.9rem); line-height: 1.35; }
+.fx { font-weight: 800; font-size: 1.3em; color: #7f1f19; }
+.win-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.2rem, 5vw, 4.6rem); line-height: 1.02; }
+.stats { display: grid; gap: 8px; }
+.stats div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid #d9cdb2; padding-block: 6px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 900px) {
+  #game { grid-template-columns: 1fr; height: auto; }
+  .setup-grid { grid-template-columns: 1fr; }
+  .options, .duel, .match { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .token { transition: none; }
+  .dice.rolling { animation: none; }
+  .timer > div { transition: none; }
+}
+[hidden] { display: none !important; }
+body { margin: 0; }
+/* site logo, same as on beligri.org pages */
+.logo { justify-self: start; display: inline-flex; align-items: center; gap: 10px; color: var(--linen); text-decoration: none; margin-bottom: 10px; }
+.logo-mark { width: 36px; height: 36px; flex: none; transition: transform .35s cubic-bezier(.3,1.6,.5,1); }
+.logo:hover .logo-mark { transform: rotate(90deg); }
+.logo-word { font-size: 1.3rem; line-height: 1; }
+.logo-word b { font-family: var(--font-display); font-weight: 400; color: #e2584a; }
+.logo-word i { font-family: var(--font-text); font-weight: 700; }
+</style>
+</head>
+<body>
+<!-- ============ SETUP ============ -->
+<section id="setup">
+  <div class="title-block">
+    <a class="logo" href="/" aria-label="БЕЛ игри, към началото"><svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="7" width="26" height="26" rx="4" transform="rotate(45 20 20)" fill="#c8372d"/><g fill="#efe6d2"><rect x="18" y="18" width="4" height="4" transform="rotate(45 20 20)"/><rect x="18" y="8" width="4" height="4" transform="rotate(45 20 10)"/><rect x="18" y="28" width="4" height="4" transform="rotate(45 20 30)"/><rect x="8" y="18" width="4" height="4" transform="rotate(45 10 20)"/><rect x="28" y="18" width="4" height="4" transform="rotate(45 30 20)"/></g></svg><span class="logo-word"><b>БЕЛ</b> <i>игри</i></span></a>
+    <span class="eyebrow">Игра по одата „Левски“ на Иван Вазов · 10. клас</span>
+    <h1>Апостол Левски</h1>
+    <p>„Левски“ е първата ода от цикъла „Епопея на забравените“ на Иван Вазов. Класът се разделя на революционни комитети. Те тръгват от манастира, където Левски решава да служи на народа, и с верни отговори стигат до безсмъртието.</p>
+  </div>
+  <div class="setup-grid">
+    <div class="box">
+      <h2>Колко комитета</h2>
+      <div class="seg" id="countSeg" role="group" aria-label="Брой комитети">
+        <button type="button" data-n="2" aria-pressed="false">2</button>
+        <button type="button" data-n="3" aria-pressed="true">3</button>
+        <button type="button" data-n="4" aria-pressed="false">4</button>
+      </div>
+      <h2>Имена на комитетите</h2>
+      <div class="team-inputs" id="teamInputs"></div>
+      <h2>Време за въпрос</h2>
+      <div class="seg" id="timeSeg" role="group" aria-label="Време за въпрос">
+        <button type="button" data-t="30" aria-pressed="true">30 с</button>
+        <button type="button" data-t="45" aria-pressed="false">45 с</button>
+        <button type="button" data-t="0" aria-pressed="false">без таймер</button>
+      </div>
+    </div>
+    <div class="box">
+      <h2>Правила</h2>
+      <ul class="rules">
+        <li><span class="chip" style="background:var(--q-green)">?</span><span><b>Зелено</b>: факт от текста. Вярно: +1, грешно: −1.</span></li>
+        <li><span class="chip" style="background:var(--q-yellow)">?</span><span><b>Жълто</b>: въпрос за смисъла. Вярно: +2, грешно: −1.</span></li>
+        <li><span class="chip" style="background:var(--q-red)">„</span><span><b>Червено</b>: цитат. Вярно: +3, грешно: −2.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">⚔</span><span><b>Двубой</b>: избирате противник. По един човек от комитет излиза на дъската. Кой пръв докосне верния отговор: +2, другият −1.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">★</span><span><b>Цялата класа</b>: отговаря всеки. Водещият отбелязва комитета, който пръв отговори вярно: +1.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">↔</span><span><b>Свържи</b> и <b>Подреди</b>: капитанът работи на дъската, класът подсказва.</span></li>
+        <li><span class="chip" style="background:#e9dcc0">!</span><span><b>Събитие</b>: случка от одата помага или пречи.</span></li>
+        <li><span class="chip" style="background:var(--brass)">В</span><span><b>Отворената врата</b>: веднъж за игра махате два грешни отговора.</span></li>
+        <li><span class="chip" style="background:var(--flag);color:#fff">★</span><span><b>Финал</b>: на полето „Безсмъртие“ комитетът отговаря на цитат. Вярно: победа. Грешно: назад с 3.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="start-row">
+    <button type="button" class="primary" id="startBtn">Тръгваме!</button>
+    <span class="note">Най-добре се играе на цял екран на интерактивната дъска.</span>
+  </div>
+</section>
+
+<!-- ============ GAME ============ -->
+<section id="game" hidden>
+  <div class="board-wrap">
+    <div class="topbar">
+      <h1>Апостол Левски</h1>
+      <div class="tools">
+        <button type="button" class="secondary" id="fsBtn">Цял екран</button>
+        <button type="button" class="secondary" id="rulesBtn">Правила</button>
+        <button type="button" class="secondary" id="newBtn">Нова игра</button>
+      </div>
+    </div>
+    <div class="board"><svg id="boardSvg" viewBox="0 0 1000 600" role="img" aria-label="Игрално поле: пътят от манастира до безсмъртието"></svg></div>
+    <div class="legend">
+      <span><i style="background:var(--q-green)"></i>факт</span>
+      <span><i style="background:var(--q-yellow)"></i>смисъл</span>
+      <span><i style="background:var(--q-red)"></i>цитат</span>
+      <span><i style="background:#e9dcc0"></i>двубой · цялата класа · свържи · подреди · събитие</span>
+    </div>
+  </div>
+  <aside class="side">
+    <div class="turn-box">
+      <span class="turn-label">На ход е</span>
+      <span class="turn-name" id="turnName"></span>
+      <button type="button" class="dice" id="dice" aria-label="Хвърли зара"></button>
+      <span class="dice-hint" id="diceHint">Докоснете зара</span>
+    </div>
+    <div class="teams" id="teamList"></div>
+    <div class="log"><h3>Какво стана</h3><ol id="log"></ol></div>
+  </aside>
+</section>
+
+<div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+
+<script>
+/* =====================================================================
+   ВЪПРОСИ. Добавяйте нови въпроси тук.
+   t: 'g' зелено (факт), 'y' жълто (смисъл), 'r' червено (цитат)
+   q: въпрос; quote: цитат (само за червени); o: 4 отговора; a: номер на верния (0–3)
+   n: кратко обяснение; ch: част от одата
+   ===================================================================== */
+const QUESTIONS = [
+  // ---- Творбата и жанрът
+  { t:'g', k:['epopeya'], q:'В кой цикъл на Иван Вазов е одата „Левски“?', o:['„Епопея на забравените“','„Под игото“','„Немили-недраги“','„Епически песни“'], a:0, n:'„Левски“ открива цикъла „Епопея на забравените“: оди за героите на Възраждането.', ch:'Творбата' },
+  { t:'g', k:['zhanr'], q:'Към какъв жанр принадлежи „Левски“?', o:['Ода','Елегия','Разказ','Басня'], a:0, n:'Одата е тържествена песен, която възхвалява герой или събитие.', ch:'Анализ: жанр' },
+  { t:'y', k:['zhanr'], q:'Кое прави „Левски“ ода?', o:['Тържественото възхваляване на героя и подвига му','Тъжният спомен за любов','Смешното изобличаване на пороци','Описанието на природата'], a:0, n:'Вазов възвеличава Левски: „Той беше безстрашлив. Той беше готов сто пъти да умре на кръста Христов…“', ch:'Анализ: жанр' },
+  { t:'y', k:['epopeya'], q:'Защо цикълът се казва „Епопея на забравените“?', o:['Вазов иска народът да помни героите на Възраждането','Героите са измислени','Всички герои са забравили родината си','Текстовете са намерени забравени в архив'], a:0, n:'С одите Вазов връща в паметта на поколенията хората, които са дали живота си за свободата.', ch:'Творбата' },
+  { t:'g', k:['epopeya'], q:'Кое произведение също е част от „Епопея на забравените“?', o:['„Опълченците на Шипка“','„Хаджи Димитър“','„Арменци“','„Пиянството на един народ“'], a:0, n:'„Хаджи Димитър“ е на Ботев, „Арменци“ на Яворов, а „Пиянството на един народ“ е глава от „Под игото“.', ch:'Творбата' },
+  { t:'g', k:['godina'], q:'Коя година е отбелязана под одата „Левски“?', o:['1881','1873','1876','1894'], a:0, n:'Одата е написана след Освобождението, осем години след смъртта на Левски (1873).', ch:'Творбата' },
+  { t:'g', k:['stih'], q:'Как се римуват стиховете в одата?', o:['Двойки съседни стихове (съседна рима)','Не се римуват (бял стих)','Кръстосано: първи с трети','Само последните стихове'], a:0, n:'„Манастирът тесен за мойта душа е. Кога човек дойде тук да се покае…“', ch:'Анализ: стих' },
+
+  // ---- Манастирът
+  { t:'g', k:['manastir'], q:'Къде е Левски в началото на одата?', o:['В манастир','В тъмница','В хижа в планината','В град, на пазара'], a:0, n:'Одата започва с монолога му в манастира: „Манастирът тесен за мойта душа е.“', ch:'Манастирът' },
+  { t:'g', k:['raso'], q:'Какво облекло носи Левски в манастира?', o:['Черно расо','Войнишка униформа','Селски дрехи','Търговски кожух'], a:0, n:'„Това расо черно, що нося отгоре, не ме помирява с тия небеса…“', ch:'Манастирът' },
+  { t:'y', k:['manastir'], q:'Защо Левски напуска манастира?', o:['Вярва, че Бог иска от него да помага на поробените братя','Изгонен е от монасите','Иска да стане търговец','Страхува се от властта'], a:0, n:'„…че ближний ми има нужда не в молитва, а в съвет и помощ, когато залитва…“', ch:'Манастирът' },
+  { t:'y', k:['konflikt'], q:'Какъв вътрешен конфликт има Левски в началото?', o:['Между монашеския живот и дълга към поробения народ','Между любовта и честта','Между богатството и бедността','Между двама приятели'], a:0, n:'Расото „не ме помирява с тия небеса“: молитвата не стига, когато братята му „търпят иго страшно“.', ch:'Анализ: конфликт' },
+  { t:'y', k:['ovchar'], q:'Какво означава сравнението с овчаря, който живее с овцете „на пек и на дъжд“?', o:['Водачът трябва да е сред народа си и да споделя мъките му','Левски иска да пасе овце','Животът на село е по-хубав','Монасите са като овчари'], a:0, n:'„…мисля ази още, че овчарят същ с овцете живее, на пек и на дъжд…“', ch:'Манастирът' },
+
+  // ---- Апостолът
+  { t:'g', k:['devet'], q:'Колко години Левски скита из поробената страна?', o:['Девет','Три','Дванадесет','Двадесет'], a:0, n:'„Девет годин той скита се бездомен, без сън, без покой, под вънкашност чужда и под име ново…“', ch:'Апостолът' },
+  { t:'g', k:['preobrazyavane'], q:'Как Левски се крие от властта?', o:['Сменя облика си: млад или стар, търговец или просяк','Живее в пещера и не излиза','Пътува само нощем с файтон','Носи турски дрехи на паша'], a:0, n:'„Тая заран млад е, довечера стар, одеве търговец, сега просяк дрипав…“', ch:'Апостолът' },
+  { t:'y', k:['preobrazyavane'], q:'Какво показват преобразяванията на Левски?', o:['Ловкостта и самоотвержеността, с които служи на делото','Че обича театъра','Че не знае кой е','Че се срамува от себе си'], a:0, n:'Той е навсякъде и никъде: „Той беше невидим, фантом, или сянка.“', ch:'Апостолът' },
+  { t:'y', k:['narod'], q:'Какво значи, че в делото участват „богатий с парите, сюрмахът с трудът“?', o:['Целият народ помага, всеки с каквото може','Само богатите помагат','Бедните не участват','Всички дават само пари'], a:0, n:'„И всякоя възраст, класа, пол, занятье зимаше участье в това предприятье…“', ch:'Апостолът' },
+  { t:'g', k:['svetec'], q:'Как простите селяни наричат Левски?', o:['Светец','Хайдутин','Чорбаджия','Даскал'], a:0, n:'„От лице му мрачно всички се бояха, селяните прости светец го зовяха…“', ch:'Апостолът' },
+  { t:'g', k:['plesnica'], q:'Какво прави Левски в едно многобройно събрание?', o:['Удря плесница на един подлец и излиза тихо','Държи дълга реч','Пее бунтовна песен','Плаща на всички'], a:0, n:'„…и лепна плесница на един подлец, и излезе тихо из малкий градец.“', ch:'Апостолът' },
+  { t:'g', k:['dvajset'], q:'Колко града обсажда властта наведнъж, за да хване Левски?', o:['Двайсет','Два','Пет','Сто'], a:0, n:'„…обсаждаше двайсет града изведнъж, да улови тоя демон вездесъщ.“', ch:'Апостолът' },
+  { t:'g', k:['yad'], q:'Какво носи Левски тайно зашито в ръкава си?', o:['Отрова','Писмо','Пари','Карта'], a:0, n:'„…зашил беше тайно в ръкава си яд“: готов е по-скоро да умре, отколкото да се предаде.', ch:'Апостолът' },
+  { t:'y', k:['husa'], q:'Защо Левски е сравнен с Хус и Симон?', o:['Готов е като тях да умре мъченически за правдата','Те са негови учители','Те са български революционери','Те също са били търговци'], a:0, n:'„…да гори, кат Хуса или кат Симона за правдата свята да мре под триона.“', ch:'Апостолът' },
+  { t:'y', k:['gonen'], q:'Какво означава „навсякъде гонен, всякъде приет“?', o:['Властта го преследва, а народът му отваря вратите','Никъде не го искат','Той гони враговете навсякъде','Навсякъде има приятели във властта'], a:0, n:'„…хижата го знайше и на всеки час вратата й за него отворена беше.“', ch:'Апостолът' },
+
+  // ---- Предателството и смъртта
+  { t:'g', k:['pop'], q:'Кой предава Левски според одата?', o:['Един поп','Негов приятел търговец','Турски войник','Селски кмет'], a:0, n:'„Той биде предаден, и от един поп!“', ch:'Предателството' },
+  { t:'y', k:['ime'], q:'Защо поетът не назовава предателя?', o:['За да не оскверни песента си с името му','Защото не го знае','Защото предателят е избягал','Защото е забравил'], a:0, n:'„…и чието име не ще спомена от страх мойта песен да не оскверна…“ Наказанието му е забравата.', ch:'Предателството' },
+  { t:'y', k:['antiteza'], q:'Каква е ролята на предателя в одата?', o:['Контраст: подлостта му прави величието на Левски още по-ясно','Той е вторият герой, когото Вазов хвали','Той е разказвачът','Той помага на Левски'], a:0, n:'Левски е „фантом“ и „светец“, а предателят е „мръсен червяк“, „низък роб“, „който равен в адът има само Юда“.', ch:'Анализ: конфликт' },
+  { t:'y', k:['lirgeroj'], q:'Какво чувства говорещият в одата към предателя?', o:['Гняв и презрение','Съжаление и прошка','Безразличие','Възхищение'], a:0, n:'„И тоз човек йоще живей между нас!“', ch:'Предателството' },
+  { t:'g', k:['mylchanie'], q:'Какво издава Левски на мъчителите си?', o:['Нищо: не споменава никое име','Имената на всички комитети','Мястото на оръжието','Името на предателя'], a:0, n:'„И на вси въпроси — грозно изпитанье — един ответ даде и едно мълчанье…“', ch:'Тъмницата' },
+  { t:'g', k:['obesen'], q:'Как загива Левски?', o:['Обесен е','Загива в бой','Умира в тъмницата от болест','Убит е при бягство'], a:0, n:'„Той биде обесен.“', ch:'Бесилото' },
+  { t:'g', k:['sokrat'], q:'Какво оръжие на тираните е споменато за Сократ?', o:['Отровата („ядът“)','Скалата','Синджирът','Кладата'], a:0, n:'„…ядът за Сократа с клеветата зла“. Скалата е за Прометей, синджирът за Колумб, кладата за Хус.', ch:'Бесилото' },
+  { t:'y', k:['tirani'], q:'Защо Вазов изрежда Прометей, Сократ, Колумб, Хус и Исус?', o:['Нарежда Левски сред великите мъченици за истината','Защото са живели в България','За да покаже, че тираните винаги побеждават','За да разкаже историята на Европа'], a:0, n:'Тираните искат „да уморят всичко, дето не умира“, но „най-грозний конец в бъдещето става най-сяен венец“.', ch:'Бесилото' },
+  { t:'y', k:['besilo'], q:'Защо бесилото е наречено „славно“?', o:['Смъртта на героите за свободата го прави знак за чест и свобода','Защото е красиво направено','Защото е в столицата','Защото там умират само предатели'], a:0, n:'„Ти белег си страшен и знак за свобода“; подлецът и шпионът „умираха мирни на свойто легло“, а героят на бесилото става безсмъртен.', ch:'Бесилото' },
+  { t:'y', k:['kompoziciya'], q:'Как е изградена композицията на одата?', o:['Манастирът, апостолското дело, предателството, тъмницата, бесилото','Детството, любовта, сватбата','Само описание на битка','Писма между Левски и приятелите му'], a:0, n:'Одата следва пътя на героя и завършва с химн на бесилото, „от където виждаше духът към безсмъртието по-прекия път“.', ch:'Анализ: композиция' },
+  { t:'y', k:['ideya'], q:'Каква е основната идея на одата?', o:['Саможертвата за свободата прави героя безсмъртен','Смъртта е краят на всичко','Тиранинът винаги е по-силен','Човек трябва да стои далеч от света'], a:0, n:'„…и по тоя начин най-грозний конец в бъдещето става най-сяен венец.“', ch:'Цялата ода' },
+  { t:'y', k:['tema'], q:'Коя е темата на одата?', o:['Подвигът и саможертвата на Апостола на свободата','Животът в манастира','Любовта към природата','Пътуване из Европа'], a:0, n:'Одата разказва пътя на Левски от манастира до бесилото.', ch:'Анализ: тема' },
+
+  // ---- Цитати (червени)
+  { t:'r', k:['manastir'], quote:'„Манастирът тесен за мойта душа е.“', q:'С тези думи започва одата. Какво решава Левски?', o:['Да напусне манастира и да служи на народа','Да остане завинаги монах','Да построи нов манастир','Да стане свещеник в града'], a:0, n:'Монологът завършва с решението: „Рече и излезе.“', ch:'Манастирът' },
+  { t:'r', k:['manastir'], quote:'„…че ближний ми има нужда не в молитва, а в съвет и помощ, когато залитва“', q:'Какво разбира Левски?', o:['Истинската вяра е делото за ближния','Молитвата е най-важна','Хората не се нуждаят от помощ','Трябва да остане в килията'], a:0, n:'„…че цел по-висока Бог ни тук показа…“', ch:'Манастирът' },
+  { t:'r', k:['izleze'], quote:'„Рече и излезе.“', q:'Какво показва тази кратка фраза?', o:['Решимостта на Левски: думите му веднага стават дело','Че Левски е уморен','Че монасите го гонят','Че отива на разходка'], a:0, n:'След дългия монолог идва едно кратко действие.', ch:'Манастирът' },
+  { t:'r', k:['yasno'], quote:'„В бъдещето тъмно той гледаше ясно.“', q:'Какво внушава този стих?', o:['Левски вярва в свободата, когато другите не виждат изход','Левски има добро зрение','Левски се страхува от бъдещето','Левски гледа звездите'], a:0, n:'Антитезата тъмно — ясно показва силата на вярата му.', ch:'Апостолът' },
+  { t:'r', k:['preobrazyavane'], quote:'„Тая заран млад е, довечера стар, одеве търговец, сега просяк дрипав…“', q:'Какво описват тези стихове?', o:['Преобразяванията, с които Левски се крие от властта','Живота на един търговец','Как Левски остарява','Пазарния ден в града'], a:0, n:'„…кога беше нужно — хром, и сляп, и клипав…“', ch:'Апостолът' },
+  { t:'r', k:['strah'], quote:'„…че страхът е подлост, гордостта — пиянство“', q:'Какво учи Левски хората?', o:['Да бъдат смели, но не горделиви','Да се страхуват от властта','Да се гордеят с богатството си','Да пият за свободата'], a:0, n:'„…и че трябва твърдост, кураж, постоянство…“', ch:'Апостолът' },
+  { t:'r', k:['narod'], quote:'„…богатий с парите, сюрмахът с трудът, момите с иглата, учений с умът“', q:'Какво показва това изброяване?', o:['Че целият народ участва в подготовката за свобода','Кой какво купува на пазара','Как се делят парите','Кои хора не помагат'], a:0, n:'А самият Левски „за да е полезен дал си бе животът!“', ch:'Апостолът' },
+  { t:'r', k:['smart'], quote:'„Смъртта бе за него и приятел и брат“', q:'Какво качество на Левски показва този стих?', o:['Безстрашието му','Тъгата му','Болестта му','Самотата му'], a:0, n:'„Той беше безстрашлив. Той беше готов сто пъти да умре на кръста Христов…“', ch:'Апостолът' },
+  { t:'r', k:['fantom'], quote:'„Той беше невидим, фантом, или сянка.“', q:'Защо Левски е наречен така?', o:['Появява се и изчезва без следа и властта не може да го хване','Защото е болен и блед','Защото е призрак от приказка','Защото живее само нощем в гробищата'], a:0, n:'„Покаже се, скрий се без знак и без след…“', ch:'Апостолът' },
+  { t:'r', k:['gonen'], quote:'„…навсякъде гонен, всякъде приет.“', q:'Каква художествена фигура има в този стих?', o:['Антитеза: гонен — приет','Сравнение','Олицетворение','Хипербола'], a:0, n:'Властта го гони, а народът го приема.', ch:'Апостолът' },
+  { t:'r', k:['plesnica'], quote:'„…и лепна плесница на един подлец, и излезе тихо из малкий градец.“', q:'Какво показва тази случка?', o:['Дързостта и безстрашието на Левски','Че Левски е избухлив','Че се кара с приятелите си','Че не обича малките градове'], a:0, n:'Той влиза „внезапно“, поздравява „спокойно“ и излиза „тихо“.', ch:'Апостолът' },
+  { t:'r', k:['svetec'], quote:'„…селяните прости светец го зовяха“', q:'Какво показват тези думи?', o:['Народът обича и почита Левски','Левски е канонизиран от църквата','Селяните се подиграват с него','Левски живее в манастир'], a:0, n:'Хората го слушат „със трепет, с зяпнали уста“.', ch:'Апостолът' },
+  { t:'r', k:['pop'], quote:'„Той биде предаден, и от един поп!“', q:'Защо удивителната е важна тук?', o:['Изразява ужаса и възмущението, че предател е духовник','Показва радостта на поета','Означава въпрос','Показва, че попът е герой'], a:0, n:'Попът е „позор за Бога, туй пятно на храма“.', ch:'Предателството' },
+  { t:'r', k:['fanete'], quote:'„Фанете тогоз!“', q:'Кой изрича тези думи?', o:['Предателят','Левски','Тиранинът','Съдията'], a:0, n:'„…на кого устата, пълни с яд и злост, изрекоха подло: „Фанете тогоз!““', ch:'Предателството' },
+  { t:'r', k:['ime'], quote:'„…и чието име не ще спомена от страх мойта песен да не оскверна“', q:'За кого говори поетът?', o:['За предателя','За Левски','За тиранина','За Хус'], a:0, n:'Името на предателя няма място в песента за героя.', ch:'Предателството' },
+  { t:'r', k:['lirgeroj'], quote:'„И тоз човек йоще живей между нас!“', q:'Какво изразява този стих?', o:['Негодувание, че предателят е жив и ненаказан','Радост от срещата','Надежда за прошка','Учудване от дългия му живот'], a:0, n:'Одата е от 1881 г.: предателят още е жив след Освобождението.', ch:'Предателството' },
+  { t:'r', k:['mylchanie'], quote:'„Смъртта беше близко, но страхът далеч.“', q:'Какво показва този стих?', o:['Левски не се страхува дори пред смъртта','Левски е далеч от тъмницата','Смъртта му е случайна','Страхът го спасява'], a:0, n:'„И той не пошушна предателска реч.“', ch:'Тъмницата' },
+  { t:'r', k:['levski'], quote:'„Аз съм Левски! Ей ме на!“', q:'Какво показва този отговор на разпита?', o:['Левски поема всичко върху себе си и не издава никого','Левски се хвали','Левски моли за милост','Левски издава другарите си'], a:0, n:'„И никое име той не спомена.“', ch:'Тъмницата' },
+  { t:'r', k:['tirani'], quote:'„…да уморят всичко, дето не умира“', q:'Какво искат тираните според одата?', o:['Да убият безсмъртното: истината и свободния дух','Да спечелят война','Да построят град','Да станат приятели с народа'], a:0, n:'Но духът не умира: „най-грозний конец в бъдещето става най-сяен венец“.', ch:'Бесилото' },
+  { t:'r', k:['venec'], quote:'„…и по тоя начин най-грозний конец в бъдещето става най-сяен венец.“', q:'Каква е мисълта на тези стихове?', o:['Мъченическата смърт се превръща в слава','Всеки край е грозен','Венецът се дава на победителя в бой','Бъдещето е мрачно'], a:0, n:'Така е с Прометей, Сократ, Хус, Исус и Левски.', ch:'Бесилото' },
+  { t:'r', k:['besilo'], quote:'„О, бесило славно!“', q:'Каква художествена фигура е това?', o:['Реторично обръщение','Сравнение','Метафора за пътя','Риторичен въпрос'], a:0, n:'Поетът се обръща към бесилото като към живо: „Свещено си ти.“', ch:'Бесилото' },
+  { t:'r', k:['besilo'], quote:'„Ти белег си страшен и знак за свобода…“', q:'Какво става бесилото в края на одата?', o:['Символ на свободата и на саможертвата','Символ на позора на Левски','Обикновено място за наказание','Паметник на тирана'], a:0, n:'„По срам и по блясък ти си с кръста равно!“', ch:'Бесилото' },
+  { t:'r', k:['bezsmartie'], quote:'„…и връх, от където виждаше духът към безсмъртието по-прекия път!“', q:'С каква мисъл завършва одата?', o:['Смъртта за свободата е най-краткият път към безсмъртието','Духът се страхува от смъртта','Пътят към свободата е безкраен','Героите трябва да избягат в планината'], a:0, n:'С тези стихове завършва одата „Левски“.', ch:'Бесилото' }
+];
+
+/* Свържи: по 4 двойки */
+const MATCHES = [
+  { k:['narod'], title:'Свържете кой с какво помага на делото', ch:'Апостолът', pairs:[
+    ['богатият','с парите'], ['сюрмахът','с труда'], ['момите','с иглата'], ['ученият','с ума'] ] },
+  { k:['tirani','sokrat'], title:'Свържете жертвата с оръдието на тираните', ch:'Бесилото', pairs:[
+    ['Прометей','стръмната скала'], ['Сократ','отровата („ядът“)'], ['Колумб','синджирът'], ['Хус','кладата'] ] },
+  { k:['raso','plesnica','pop','besilo'], title:'Свържете образа с това, което внушава', ch:'„Левски“', pairs:[
+    ['расото','монашеският живот, който Левски напуска'], ['плесницата','безстрашието пред подлеца'], ['попът предател','позор и измяна'], ['бесилото','знак за свобода и слава'] ] },
+  { k:['antiteza','gonen'], title:'Свържете художественото средство с примера', ch:'Анализ: художествени средства', pairs:[
+    ['антитеза','„навсякъде гонен, всякъде приет“'], ['сравнение','„кат дете прост“'], ['реторично обръщение','„О, бесило славно!“'], ['изброяване','„богатий с парите, сюрмахът с трудът…“'] ] }
+];
+
+/* Подреди: елементите са в правилния ред */
+const ORDERS = [
+  { k:['manastir','pop','obesen'], title:'Подредете събитията в одата', ch:'„Левски“', items:[
+    'Левски напуска манастира', 'Девет години скита из страната', 'Предаден е от един поп', 'На разпита казва: „Аз съм Левски!“', 'Обесен е' ] },
+  { k:['kompoziciya'], title:'Подредете частите на композицията', ch:'Анализ: композиция', items:[
+    'Монологът в манастира', 'Апостолското дело', 'Предателството', 'Тъмницата и мълчанието', 'Химнът на бесилото' ] },
+  { k:['tirani'], title:'Подредете жертвите на тираните по реда, в който са назовани в одата', ch:'Бесилото', items:[
+    'Прометей', 'Сократ', 'Колумб', 'Хус', 'Исус' ] }
+];
+
+/* Събития: move: полета (+/−), all: всички комитети, skip: пропуска ход, again: хвърля пак */
+const EVENTS = [
+  { title:'Рече и излезе', text:'Решението е взето. Тръгвате напред.', fx:{ move:2 } },
+  { title:'Без сън, без покой', text:'Пътят е дълъг и тежък. Пропускате следващия си ход.', fx:{ skip:1 } },
+  { title:'Хижата го знае', text:'Вратата е отворена за Апостола. Напред с 1.', fx:{ move:1 } },
+  { title:'Одеве търговец, сега просяк', text:'Властта не ви позна. Хвърлете зара още веднъж!', fx:{ again:1 } },
+  { title:'Плесница на подлеца', text:'Влизате внезапно и излизате тихо. Напред с 2.', fx:{ move:2 } },
+  { title:'Двайсет града наведнъж', text:'Властта обсажда градовете. Всички комитети се връщат с едно поле.', fx:{ all:-1 } },
+  { title:'Семето пада в сърцата', text:'„И семето чудно падаше в сърцата и бързо растеше за жътва богата.“ Всички комитети вървят напред.', fx:{ all:1 } },
+  { title:'Предателство', text:'„Фанете тогоз!“ Назад с 2.', fx:{ move:-2 } },
+  { title:'Тъмница', text:'Окован и кървав, но без страх. Пропускате следващия си ход.', fx:{ skip:1 } },
+  { title:'Шпионин', text:'Някой ви следи. Назад с 1.', fx:{ move:-1 } }
+];
+
+/* ===================================================================== */
+const TEAM_COLORS = ['var(--t1)','var(--t2)','var(--t3)','var(--t4)'];
+const TEAM_HEX = ['#d9483b','#4a86d6','#e6b93a','#63b86e'];
+const DEFAULT_NAMES = ['Комитет „Ловеч“','Комитет „Карлово“','Комитет „Сопот“','Комитет „Търново“'];
+const TYPE_INFO = {
+  g:{ name:'Факт', color:'var(--q-green)', hex:'#4f9d5d', plus:1, minus:-1 },
+  y:{ name:'Смисъл', color:'var(--q-yellow)', hex:'#e0b23a', plus:2, minus:-1 },
+  r:{ name:'Цитат', color:'var(--q-red)', hex:'#c8372d', plus:3, minus:-2 },
+  d:{ name:'Двубой', hex:'#e9dcc0' }, a:{ name:'Цялата класа', hex:'#e9dcc0' },
+  m:{ name:'Свържи', hex:'#e9dcc0' }, o:{ name:'Подреди', hex:'#e9dcc0' }, e:{ name:'Събитие', hex:'#e9dcc0' }
+};
+/* поле: 0 = старт, последното = „Безсмъртие“ */
+const CELLS = ['s','g','y','e','g','r','d','y','g','m','e','r','g','a','y','o','g','e','r','d','y','g','m','e','r','a','y','g','o','e','r','y','f'];
+const STATIONS = { 0:'Манастирът', 5:'Пътеките', 10:'Хижата', 15:'Седянката', 20:'Предателството', 25:'Тъмницата', 29:'Бесилото', 32:'Безсмъртие' };
+const LETTERS = ['А','Б','В','Г'];
+
+let S = null; // game state
+let timerId = null;
+let cellPts = [];
+
+const $ = (id) => document.getElementById(id);
+const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const signed = (n) => (n > 0 ? '+' + n : '−' + Math.abs(n));
+const fieldsWord = (n) => Math.abs(n) === 1 ? 'поле' : 'полета';
+
+/* ---------------- setup ---------------- */
+let setupCount = 3, setupTime = 30;
+function renderTeamInputs() {
+  const box = $('teamInputs');
+  const old = [...box.querySelectorAll('input')].map(i => i.value);
+  box.innerHTML = '';
+  for (let i = 0; i < setupCount; i++) {
+    const row = document.createElement('div');
+    row.className = 'team-row';
+    row.innerHTML = `<span class="flag-dot" style="background:${TEAM_COLORS[i]}"></span><input id="teamName${i}" type="text" maxlength="28" aria-label="Име на комитет ${i + 1}" value="${esc(old[i] ?? DEFAULT_NAMES[i])}">`;
+    box.appendChild(row);
+  }
+}
+function bindSeg(segId, attr, cb) {
+  $(segId).addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    $(segId).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    cb(Number(b.dataset[attr]));
+  });
+}
+bindSeg('countSeg', 'n', (n) => { setupCount = n; renderTeamInputs(); });
+bindSeg('timeSeg', 't', (t) => { setupTime = t; });
+renderTeamInputs();
+
+$('startBtn').addEventListener('click', () => {
+  const teams = [];
+  for (let i = 0; i < setupCount; i++) {
+    const v = ($('teamName' + i).value || '').trim();
+    teams.push({ name: v || DEFAULT_NAMES[i], pos: 0, skip: 0, joker: true, right: 0, asked: 0, color: i });
+  }
+  S = { teams, turn: 0, time: setupTime, phase: 'roll', used: { g:[], y:[], r:[], m:[], o:[], e:[] }, seen: [], log: ['Комитетите тръгват от манастира.'], winner: null, dice: 1 };
+  showGame();
+});
+
+/* ---------------- board ---------------- */
+function buildBoard() {
+  const svg = $('boardSvg');
+  const NS = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  // the Balkan in the background
+  const deco = document.createElementNS(NS, 'g');
+  deco.setAttribute('opacity', '0.55');
+  const ridges = [
+    'M0 130 L60 70 L110 110 L170 40 L240 105 L300 60 L360 120',
+    'M560 260 L610 205 L650 240 L700 180 L760 245',
+    'M40 600 L120 540 L190 580',
+    'M780 600 L860 520 L930 570 L1000 520'
+  ];
+  ridges.forEach(d => { const p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#5e3c1b'); p.setAttribute('stroke-width', '4'); p.setAttribute('stroke-linejoin', 'round'); deco.appendChild(p); });
+  svg.appendChild(deco);
+
+  // the road
+  const roadD = 'M70 520 C200 560 330 500 330 420 S170 330 190 250 S330 120 470 150 S560 330 680 340 S900 300 890 200 S760 70 860 60';
+  const road = document.createElementNS(NS, 'path');
+  road.setAttribute('d', roadD); road.setAttribute('fill', 'none'); road.setAttribute('stroke', '#0e0803'); road.setAttribute('stroke-width', '30'); road.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(road);
+  const road2 = road.cloneNode(); road2.setAttribute('stroke', '#9a6430'); road2.setAttribute('stroke-width', '4'); road2.setAttribute('stroke-dasharray', '2 12');
+  svg.appendChild(road2);
+
+  const len = road.getTotalLength();
+  const n = CELLS.length;
+  cellPts = [];
+  for (let i = 0; i < n; i++) { const p = road.getPointAtLength(len * i / (n - 1)); cellPts.push({ x: p.x, y: p.y }); }
+
+  const cellsG = document.createElementNS(NS, 'g');
+  CELLS.forEach((t, i) => {
+    const { x, y } = cellPts[i];
+    const g = document.createElementNS(NS, 'g');
+    const big = (t === 's' || t === 'f');
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', big ? 30 : 22);
+    c.setAttribute('class', 'cell-circle');
+    c.setAttribute('fill', t === 's' ? '#efe6d2' : t === 'f' ? '#c8372d' : TYPE_INFO[t].hex);
+    g.appendChild(c);
+    g.appendChild(cellIcon(NS, t, x, y));
+    cellsG.appendChild(g);
+  });
+  svg.appendChild(cellsG);
+
+  // station labels
+  Object.entries(STATIONS).forEach(([i, label]) => {
+    i = Number(i);
+    const { x, y } = cellPts[i];
+    const above = !(i === 0 || i === 15);
+    const ty = above ? y - 44 : y + 52;
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', x); t.setAttribute('y', ty); t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'station-label');
+    t.textContent = label;
+    svg.appendChild(t);
+    const bb = t.getBBox();
+    const r = document.createElementNS(NS, 'rect');
+    r.setAttribute('x', bb.x - 8); r.setAttribute('y', bb.y - 3); r.setAttribute('width', bb.width + 16); r.setAttribute('height', bb.height + 6); r.setAttribute('rx', 5); r.setAttribute('class', 'station-bg');
+    svg.insertBefore(r, t);
+  });
+
+  const tokG = document.createElementNS(NS, 'g'); tokG.setAttribute('id', 'tokens');
+  S.teams.forEach((tm, k) => {
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'token'); g.setAttribute('id', 'tok' + k);
+    const c = document.createElementNS(NS, 'circle'); c.setAttribute('r', 15); c.setAttribute('fill', TEAM_HEX[tm.color]);
+    const tx = document.createElementNS(NS, 'text'); tx.textContent = String(k + 1);
+    g.appendChild(c); g.appendChild(tx); tokG.appendChild(g);
+  });
+  svg.appendChild(tokG);
+}
+function cellIcon(NS, t, x, y) {
+  if (t === 'd') { // crossed sabres
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('stroke', '#10201b'); g.setAttribute('stroke-width', '4'); g.setAttribute('stroke-linecap', 'round');
+    [['-9','-9','9','9'],['9','-9','-9','9']].forEach(([a,b,c,d]) => { const l = document.createElementNS(NS, 'line'); l.setAttribute('x1', x + Number(a)); l.setAttribute('y1', y + Number(b)); l.setAttribute('x2', x + Number(c)); l.setAttribute('y2', y + Number(d)); g.appendChild(l); });
+    return g;
+  }
+  if (t === 'a' || t === 'f') { // star
+    const pts = []; for (let k = 0; k < 10; k++) { const r = k % 2 ? 5 : (t === 'f' ? 15 : 11); const ang = -Math.PI / 2 + k * Math.PI / 5; pts.push((x + r * Math.cos(ang)).toFixed(1) + ',' + (y + r * Math.sin(ang)).toFixed(1)); }
+    const p = document.createElementNS(NS, 'polygon'); p.setAttribute('points', pts.join(' ')); p.setAttribute('fill', t === 'f' ? '#f3ead6' : '#10201b'); return p;
+  }
+  if (t === 'm') { // linked rings
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('fill', 'none'); g.setAttribute('stroke', '#10201b'); g.setAttribute('stroke-width', '3.5');
+    [-5, 5].forEach(dx => { const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', x + dx); c.setAttribute('cy', y); c.setAttribute('r', 7); g.appendChild(c); });
+    return g;
+  }
+  if (t === 'o') { // three steps
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('fill', '#10201b');
+    [[-10, 4, 6], [-3, -2, 12], [4, -8, 18]].forEach(([dx, dy, h]) => { const r = document.createElementNS(NS, 'rect'); r.setAttribute('x', x + dx); r.setAttribute('y', y + dy); r.setAttribute('width', 5); r.setAttribute('height', h - 6 + 6); g.appendChild(r); });
+    return g;
+  }
+  const tx = document.createElementNS(NS, 'text'); tx.setAttribute('x', x); tx.setAttribute('y', y + 1); tx.setAttribute('class', 'cell-icon');
+  tx.textContent = t === 'e' ? '!' : t === 'r' ? '„' : t === 's' ? '★' : '?';
+  if (t === 'r') tx.setAttribute('y', y - 4);
+  return tx;
+}
+function placeTokens() {
+  const groups = {};
+  S.teams.forEach((tm, k) => { (groups[tm.pos] = groups[tm.pos] || []).push(k); });
+  Object.entries(groups).forEach(([pos, ks]) => {
+    const p = cellPts[Number(pos)];
+    ks.forEach((k, j) => {
+      const off = ks.length === 1 ? { x: 0, y: -2 } : [{ x: -13, y: -13 }, { x: 13, y: -13 }, { x: -13, y: 13 }, { x: 13, y: 13 }][j];
+      const el = $('tok' + k);
+      el.style.transform = `translate(${p.x + off.x}px, ${p.y + off.y}px)`;
+      el.classList.toggle('active', k === S.turn && !S.winner);
+    });
+  });
+}
+
+/* ---------------- side panel ---------------- */
+function renderSide() {
+  const tm = S.teams[S.turn];
+  $('turnName').textContent = tm.name;
+  $('turnName').style.color = TEAM_COLORS[tm.color];
+  $('teamList').innerHTML = S.teams.map((t, k) => `
+    <div class="team-card ${k === S.turn ? 'active' : ''}">
+      <span class="bar" style="background:${TEAM_COLORS[t.color]}"></span>
+      <span><span class="nm">${k + 1}. ${esc(t.name)}</span>
+        <span class="meta"><span>верни: ${t.right}/${t.asked}</span>${t.joker ? '<span>Вратата: отворена</span>' : '<span>Вратата: използвана</span>'}${t.skip ? '<span>пропуска ход</span>' : ''}</span></span>
+      <span class="pos" title="Поле">${t.pos}/${CELLS.length - 1}</span>
+    </div>`).join('');
+  $('log').innerHTML = S.log.slice(0, 7).map(l => `<li>${esc(l)}</li>`).join('');
+  $('dice').disabled = S.phase !== 'roll';
+  ['newBtn', 'rulesBtn'].forEach(id => { $(id).disabled = S.phase !== 'roll'; });
+  $('diceHint').textContent = S.phase === 'roll' ? 'Докоснете зара' : '';
+  drawDice(S.dice);
+  placeTokens();
+}
+function addLog(t) { S.log.unshift(t); if (S.log.length > 30) S.log.pop(); }
+function drawDice(n) {
+  const map = { 1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
+  const d = $('dice');
+  if (!d.children.length) for (let i = 0; i < 9; i++) { const s = document.createElement('span'); s.className = 'pip'; d.appendChild(s); }
+  [...d.children].forEach((p, i) => p.classList.toggle('on', map[n].includes(i)));
+  d.setAttribute('aria-label', 'Хвърли зара. Последно хвърляне: ' + n);
+}
+
+/* ---------------- turn flow ---------------- */
+function showGame() {
+  $('setup').hidden = true; $('game').hidden = false;
+  buildBoard(); renderSide();
+  // station labels are measured with the real font once it has loaded
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (S && !$('game').hidden) { buildBoard(); placeTokens(); } });
+  if (S.winner !== null && S.winner !== undefined) showWin();
+}
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait = (ms) => new Promise(r => setTimeout(r, reduceMotion ? Math.min(ms, 40) : ms));
+
+$('dice').addEventListener('click', async () => {
+  if (S.phase !== 'roll') return;
+  S.phase = 'moving'; renderSide();
+  const d = $('dice'); d.classList.add('rolling');
+  for (let i = 0; i < 6; i++) { drawDice(1 + Math.floor(Math.random() * 6)); await wait(80); }
+  d.classList.remove('rolling');
+  const n = 1 + Math.floor(Math.random() * 6);
+  S.dice = n; drawDice(n);
+  const tm = S.teams[S.turn];
+  addLog(`${tm.name} хвърли ${n}.`);
+  await stepMove(S.turn, n);
+  resolveCell();
+});
+async function stepMove(k, n) {
+  const tm = S.teams[k];
+  const last = CELLS.length - 1;
+  const dir = n > 0 ? 1 : -1;
+  for (let i = 0; i < Math.abs(n); i++) {
+    const next = tm.pos + dir;
+    if (next < 0 || next > last) break;
+    tm.pos = next; placeTokens(); await wait(230);
+  }
+  renderSide();
+}
+function moveNow(k, n) { // instant move after answers and events
+  const t = S.teams[k];
+  // a reward never carries a team onto „Безсмъртие“: the final cell is reached only with the dice
+  const cap = CELLS.length - 2;
+  if (n > 0) t.pos = Math.max(t.pos, Math.min(cap, t.pos + n));
+  else t.pos = Math.max(0, t.pos + n);
+}
+function nextTurn(again) {
+  closeCard();
+  if (S.winner !== null && S.winner !== undefined) return;
+  if (!again) {
+    let guard = 0;
+    do {
+      S.turn = (S.turn + 1) % S.teams.length;
+      const t = S.teams[S.turn];
+      if (t.skip > 0) { t.skip--; addLog(`${t.name} пропуска хода си.`); guard++; continue; }
+      break;
+    } while (guard < 10);
+  }
+  S.phase = 'roll';
+  renderSide();
+}
+function resolveCell() {
+  const tm = S.teams[S.turn];
+  const t = CELLS[tm.pos];
+  S.phase = 'card';
+  renderSide();
+  if (t === 'g' || t === 'y' || t === 'r') return askQuestion(t, false);
+  if (t === 'f') return askQuestion('r', true);
+  if (t === 'd') return S.teams.length > 1 ? pickDuel() : askQuestion('y', false);
+  if (t === 'a') return allClass();
+  if (t === 'm') return matchGame();
+  if (t === 'o') return orderGame();
+  if (t === 'e') return eventCard();
+  nextTurn();
+}
+// Never repeat a card while the deck has unused ones, and prefer cards whose topic (k) has not
+// come up yet in this game: „Кой блъска портата?“ and „Чорбаджи, отвори!“ ask about the same fact.
+function draw(kind, pool) {
+  if (!S.seen) S.seen = [];
+  const used = S.used[kind];
+  let idx = pool.map((_, i) => i).filter(i => !used.includes(i));
+  if (!idx.length) {
+    const last = used[used.length - 1];
+    S.used[kind] = [];
+    idx = pool.map((_, i) => i).filter(i => i !== last || pool.length === 1);
+  }
+  const clash = (i) => (pool[i].k || []).filter(t => S.seen.includes(t)).length;
+  const least = Math.min(...idx.map(clash));
+  idx = idx.filter(i => clash(i) === least);
+  const pick = idx[Math.floor(Math.random() * idx.length)];
+  S.used[kind].push(pick);
+  S.seen.push(...(pool[pick].k || []));
+  return pool[pick];
+}
+
+/* ---------------- card helpers ---------------- */
+function openCard(html) { $('card').innerHTML = html; $('overlay').hidden = false; const f = $('card').querySelector('button:not(:disabled)'); if (f) f.focus({ preventScroll: true }); }
+function closeCard() { stopTimer(); $('overlay').hidden = true; $('card').innerHTML = ''; }
+function headHtml(kindName, kindHex, team) {
+  const t = team ?? S.teams[S.turn];
+  return `<div class="card-head"><span class="kind"><i style="background:${kindHex}"></i>${kindName}</span>
+    <span class="who"><i style="background:${TEAM_COLORS[t.color]}"></i>${esc(t.name)}</span></div>`;
+}
+function startTimer(sec, onEnd) {
+  stopTimer();
+  const bar = $('card').querySelector('.timer');
+  if (!sec || !bar) { if (bar) bar.hidden = true; return; }
+  let left = sec;
+  const inner = bar.firstElementChild;
+  inner.style.width = '100%';
+  timerId = setInterval(() => {
+    left--;
+    inner.style.width = Math.max(0, left / sec * 100) + '%';
+    bar.classList.toggle('low', left <= 5);
+    if (left <= 0) { stopTimer(); onEnd(); }
+  }, 1000);
+}
+function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
+function verdictHtml(ok, title, note, ch, fxText) {
+  return `<div class="verdict"><span class="v-title ${ok ? 'ok' : 'bad'}">${title}</span>
+    ${note ? `<span class="v-note">${esc(note)}</span>` : ''}
+    ${ch ? `<span class="v-ch">${esc(ch)}</span>` : ''}
+    ${fxText ? `<span class="fx">${esc(fxText)}</span>` : ''}</div>`;
+}
+function optionsHtml(opts, prefix) {
+  return opts.map((o, i) => `<button type="button" class="opt" data-${prefix}="${i}"><span class="ltr">${LETTERS[i]}</span><span>${esc(o.text)}</span></button>`).join('');
+}
+function prepOptions(q) { return shuffle(q.o.map((text, i) => ({ text, ok: i === q.a }))); }
+function questionBody(q) {
+  return (q.quote ? `<div class="q-quote">${esc(q.quote)}</div><div class="q-sub">${esc(q.q)}</div>` : `<div class="q-text">${esc(q.q)}</div>`);
+}
+
+/* ---------------- question ---------------- */
+function askQuestion(type, isFinal) {
+  const pool = QUESTIONS.filter(x => x.t === type);
+  const q = draw(type, pool);
+  const opts = prepOptions(q);
+  const tm = S.teams[S.turn];
+  const info = TYPE_INFO[type];
+  const label = isFinal ? 'Финал · цитат' : info.name;
+  const rewardTxt = isFinal ? 'Вярно: победа · Грешно: назад с 3' : `Вярно: ${signed(info.plus)} · Грешно: ${signed(info.minus)}`;
+  openCard(`${headHtml(label, isFinal ? '#c8372d' : info.hex)}
+    ${questionBody(q)}
+    <div class="timer"><div></div></div>
+    <div class="options">${optionsHtml(opts, 'i')}</div>
+    <div class="card-foot"><span class="note" style="color:#5a5242;font-weight:700">${rewardTxt}</span>
+      <button type="button" class="btn-ghost" id="jokerBtn" ${tm.joker ? '' : 'disabled'}>Отворената врата</button></div>
+    <div id="after"></div>`);
+  let done = false;
+  const finish = (pickedIdx) => {
+    if (done) return; done = true; stopTimer();
+    const btns = [...$('card').querySelectorAll('.opt')];
+    btns.forEach((b, i) => { b.disabled = true; if (opts[i].ok) b.classList.add('correct'); });
+    const ok = pickedIdx !== null && opts[pickedIdx].ok;
+    if (pickedIdx !== null && !ok) btns[pickedIdx].classList.add('wrong');
+    $('jokerBtn').disabled = true;
+    tm.asked++; if (ok) tm.right++;
+    let fx = '';
+    if (isFinal) {
+      if (ok) { S.winner = S.turn; addLog(`${tm.name} стигна до безсмъртието!`); fx = 'Комитетът стигна до безсмъртието!'; }
+      else { moveNow(S.turn, -3); fx = 'Назад с 3 полета.'; addLog(`${tm.name} не позна цитата на финала и се връща с 3.`); }
+    } else {
+      const delta = ok ? info.plus : info.minus;
+      moveNow(S.turn, delta);
+      fx = `${tm.name}: ${signed(delta)} ${fieldsWord(delta)}.`;
+      addLog(`${tm.name} ${ok ? 'отговори вярно' : 'сгреши'} (${info.name.toLowerCase()}): ${signed(delta)}.`);
+    }
+    const title = pickedIdx === null ? 'Времето изтече' : ok ? 'Вярно!' : 'Не е вярно';
+    $('after').innerHTML = verdictHtml(ok, title, q.n, q.ch, fx) + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">${S.winner !== null && S.winner !== undefined ? 'Към победата' : 'Продължи'}</button></div>`;
+    renderSide();
+    $('contBtn').focus({ preventScroll: true });
+    $('contBtn').addEventListener('click', () => { if (S.winner !== null && S.winner !== undefined) { closeCard(); showWin(); } else nextTurn(); });
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('card').querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => finish(Number(b.dataset.i))));
+  $('jokerBtn').addEventListener('click', () => {
+    if (!tm.joker || done) return;
+    tm.joker = false;
+    const wrong = opts.map((o, i) => o.ok ? -1 : i).filter(i => i >= 0);
+    shuffle(wrong).slice(0, 2).forEach(i => { const b = $('card').querySelectorAll('.opt')[i]; b.disabled = true; b.classList.add('gone'); });
+    $('jokerBtn').disabled = true;
+    addLog(`${tm.name} използва Отворената врата.`);
+    renderSide();
+  });
+  startTimer(S.time, () => finish(null));
+}
+
+/* ---------------- duel ---------------- */
+function pickDuel() {
+  const others = S.teams.map((t, k) => ({ t, k })).filter(x => x.k !== S.turn);
+  openCard(`${headHtml('Двубой', '#e9dcc0')}
+    <div class="q-text">Кого предизвиквате на двубой?</div>
+    <div class="q-sub">По един човек от двата комитета излиза на дъската. Всеки отговаря на своята половина. Кой пръв докосне верния отговор, печели.</div>
+    <div class="pick-row">${others.map(x => `<button type="button" data-k="${x.k}" style="background:${TEAM_HEX[x.t.color]}">${esc(x.t.name)}</button>`).join('')}</div>`);
+  $('card').querySelectorAll('.pick-row button').forEach(b => b.addEventListener('click', () => duel(Number(b.dataset.k))));
+}
+function duel(opp) {
+  const type = Math.random() < .5 ? 'g' : 'y';
+  const q = draw(type, QUESTIONS.filter(x => x.t === type));
+  const A = S.turn, B = opp;
+  const optsA = prepOptions(q), optsB = prepOptions(q);
+  const side = (k, opts, tag) => `<div class="duel-side" style="border-color:${TEAM_HEX[S.teams[k].color]}">
+      <h3><span>${esc(S.teams[k].name)}</span><span id="st${tag}"></span></h3>
+      <div class="options">${opts.map((o, i) => `<button type="button" class="opt" data-${tag}="${i}"><span class="ltr">${LETTERS[i]}</span><span>${esc(o.text)}</span></button>`).join('')}</div></div>`;
+  openCard(`${headHtml('Двубой', '#e9dcc0')}
+    ${questionBody(q)}
+    <div class="timer"><div></div></div>
+    <div class="duel">${side(A, optsA, 'a')}${side(B, optsB, 'b')}</div>
+    <div id="after"></div>`);
+  let done = false; const out = { a: false, b: false };
+  const end = (winnerTag) => {
+    if (done) return; done = true; stopTimer();
+    $('card').querySelectorAll('.opt').forEach(b => b.disabled = true);
+    [['a', optsA], ['b', optsB]].forEach(([tag, opts]) => $('card').querySelectorAll(`[data-${tag}]`).forEach((b, i) => { if (opts[i].ok) b.classList.add('correct'); }));
+    S.teams[A].asked++; S.teams[B].asked++;
+    let fx = 'Никой не позна. Никой не се мести.', ok = false;
+    if (winnerTag) {
+      ok = true;
+      const w = winnerTag === 'a' ? A : B, l = winnerTag === 'a' ? B : A;
+      S.teams[w].right++;
+      moveNow(w, 2); moveNow(l, -1);
+      fx = `${S.teams[w].name}: +2 полета. ${S.teams[l].name}: −1 поле.`;
+      addLog(`Двубой: ${S.teams[w].name} победи ${S.teams[l].name}.`);
+    } else addLog('Двубой без победител.');
+    $('after').innerHTML = verdictHtml(ok, winnerTag ? 'Двубоят е спечелен!' : 'Няма победител', q.n, q.ch, fx) + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`;
+    renderSide();
+    $('contBtn').addEventListener('click', () => nextTurn());
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  ['a', 'b'].forEach(tag => {
+    const opts = tag === 'a' ? optsA : optsB;
+    $('card').querySelectorAll(`[data-${tag}]`).forEach(b => b.addEventListener('click', () => {
+      if (done || out[tag]) return;
+      const i = Number(b.dataset[tag]);
+      if (opts[i].ok) { b.classList.add('correct'); end(tag); }
+      else {
+        b.classList.add('wrong'); out[tag] = true;
+        $('card').querySelectorAll(`[data-${tag}]`).forEach(x => x.disabled = true);
+        $('st' + tag).textContent = 'грешка';
+        if (out.a && out.b) end(null);
+      }
+    }));
+  });
+  startTimer(S.time, () => end(null));
+}
+
+/* ---------------- whole class ---------------- */
+function allClass() {
+  const type = Math.random() < .5 ? 'r' : 'y';
+  const q = draw(type, QUESTIONS.filter(x => x.t === type));
+  const opts = prepOptions(q);
+  openCard(`${headHtml('Цялата класа', '#e9dcc0')}
+    ${questionBody(q)}
+    <div class="q-sub">Отговаря всеки. Водещият отбелязва комитета, който пръв отговори вярно.</div>
+    <div class="timer"><div></div></div>
+    <div class="options">${opts.map((o, i) => `<div class="opt" data-i="${i}"><span class="ltr">${LETTERS[i]}</span><span>${esc(o.text)}</span></div>`).join('')}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="revealBtn">Покажи отговора</button></div>
+    <div id="after"></div>`);
+  const reveal = () => {
+    stopTimer();
+    $('card').querySelectorAll('.opt').forEach((b, i) => { if (opts[i].ok) b.classList.add('correct'); else b.classList.add('gone'); });
+    $('revealBtn').remove();
+    $('after').innerHTML = verdictHtml(true, 'Верният отговор', q.n, q.ch, '') +
+      `<div class="q-sub" style="margin-top:14px">Кой комитет отговори пръв вярно? (+1 поле)</div>
+       <div class="pick-row" style="margin-top:10px">${S.teams.map((t, k) => `<button type="button" data-k="${k}" style="background:${TEAM_HEX[t.color]}">${esc(t.name)}</button>`).join('')}
+       <button type="button" data-k="-1" style="background:#d9cdb2">Никой</button></div>`;
+    $('after').querySelectorAll('[data-k]').forEach(b => b.addEventListener('click', () => {
+      const k = Number(b.dataset.k);
+      if (k >= 0) { moveNow(k, 1); S.teams[k].right++; S.teams[k].asked++; addLog(`Цялата класа: ${S.teams[k].name} отговори пръв (+1).`); }
+      else addLog('Цялата класа: никой не позна.');
+      nextTurn();
+    }));
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('revealBtn').addEventListener('click', reveal);
+  startTimer(S.time, reveal);
+}
+
+/* ---------------- match ---------------- */
+function matchGame() {
+  const set = draw('m', MATCHES);
+  const left = set.pairs.map((p, i) => ({ text: p[0], id: i }));
+  const right = shuffle(set.pairs.map((p, i) => ({ text: p[1], id: i })));
+  const tm = S.teams[S.turn];
+  const tagColors = ['#7a5a1f', '#2f6f8a', '#8a2f5a', '#3d7a3a'];
+  const links = {}; // leftId -> rightIndex
+  let selL = null;
+  openCard(`${headHtml('Свържи', '#e9dcc0')}
+    <div class="q-text">${esc(set.title)}</div>
+    <div class="q-sub">Докоснете ляво, после дясно. ${S.time ? (S.time + 15) + ' секунди.' : ''} Всичко вярно: +2, три верни: +1.</div>
+    <div class="timer"><div></div></div>
+    <div class="match"><div class="col" id="colL">${left.map((x, i) => `<button type="button" class="m-item" data-l="${i}"><span class="tag" id="tl${i}"></span><span>${esc(x.text)}</span></button>`).join('')}</div>
+      <div class="col" id="colR">${right.map((x, i) => `<button type="button" class="m-item" data-r="${i}"><span class="tag" id="tr${i}"></span><span>${esc(x.text)}</span></button>`).join('')}</div></div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="checkBtn">Провери</button></div>
+    <div id="after"></div>`);
+  const paint = () => {
+    left.forEach((_, i) => { const tg = $('tl' + i); tg.textContent = ''; tg.style.background = '#b8ad93'; });
+    right.forEach((_, i) => { const tg = $('tr' + i); tg.textContent = ''; tg.style.background = '#b8ad93'; });
+    Object.entries(links).forEach(([l, r], n) => { const c = tagColors[Number(l) % 4]; [$('tl' + l), $('tr' + r)].forEach(tg => { tg.textContent = LETTERS[Number(l)]; tg.style.background = c; }); });
+    $('card').querySelectorAll('[data-l]').forEach(b => b.classList.toggle('sel', Number(b.dataset.l) === selL));
+  };
+  let done = false;
+  $('card').querySelectorAll('[data-l]').forEach(b => b.addEventListener('click', () => { if (done) return; selL = Number(b.dataset.l); paint(); }));
+  $('card').querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => {
+    if (done || selL === null) return;
+    const r = Number(b.dataset.r);
+    Object.keys(links).forEach(l => { if (links[l] === r) delete links[l]; });
+    links[selL] = r; selL = null; paint();
+  }));
+  const check = () => {
+    if (done) return; done = true; stopTimer();
+    let good = 0;
+    left.forEach((x, i) => {
+      const r = links[i];
+      const ok = r !== undefined && right[r].id === x.id;
+      if (ok) good++;
+      $('card').querySelector(`[data-l="${i}"]`).classList.add(ok ? 'ok' : 'bad');
+    });
+    $('card').querySelectorAll('.m-item').forEach(b => b.disabled = true);
+    const delta = good === 4 ? 2 : good === 3 ? 1 : 0;
+    if (delta) moveNow(S.turn, delta);
+    tm.asked++; if (good === 4) tm.right++;
+    addLog(`${tm.name}: свържи: ${good} от 4 (${delta ? signed(delta) : '0'}).`);
+    const correct = set.pairs.map(p => `${p[0]} → ${p[1]}`).join(' · ');
+    $('after').innerHTML = verdictHtml(good >= 3, `Верни двойки: ${good} от 4`, correct, set.ch, delta ? `${tm.name}: ${signed(delta)} ${fieldsWord(delta)}.` : 'Без промяна.') + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`;
+    $('checkBtn').remove();
+    renderSide();
+    $('contBtn').addEventListener('click', () => nextTurn());
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('checkBtn').addEventListener('click', check);
+  startTimer(S.time ? S.time + 15 : 0, check);
+}
+
+/* ---------------- order ---------------- */
+function orderGame() {
+  const set = draw('o', ORDERS);
+  const items = shuffle(set.items.map((text, i) => ({ text, i })));
+  const tm = S.teams[S.turn];
+  const picked = []; // indices into items
+  openCard(`${headHtml('Подреди', '#e9dcc0')}
+    <div class="q-text">${esc(set.title)}</div>
+    <div class="q-sub">Докоснете ги поред: първото, второто… Докосване отново отменя. Всичко вярно: +2.</div>
+    <div class="timer"><div></div></div>
+    <div class="order-list">${items.map((x, k) => `<button type="button" class="m-item" data-o="${k}"><span class="num" id="on${k}"></span><span>${esc(x.text)}</span></button>`).join('')}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="checkBtn">Провери</button></div>
+    <div id="after"></div>`);
+  let done = false;
+  const paint = () => items.forEach((_, k) => { const n = picked.indexOf(k); const el = $('on' + k); el.textContent = n >= 0 ? n + 1 : ''; el.classList.toggle('set', n >= 0); });
+  $('card').querySelectorAll('[data-o]').forEach(b => b.addEventListener('click', () => {
+    if (done) return;
+    const k = Number(b.dataset.o); const at = picked.indexOf(k);
+    if (at >= 0) picked.splice(at); else picked.push(k);
+    paint();
+  }));
+  const check = () => {
+    if (done) return; done = true; stopTimer();
+    const ok = picked.length === items.length && picked.every((k, n) => items[k].i === n);
+    items.forEach((x, k) => { const n = picked.indexOf(k); $('card').querySelector(`[data-o="${k}"]`).classList.add(n === x.i ? 'ok' : 'bad'); });
+    $('card').querySelectorAll('.m-item').forEach(b => b.disabled = true);
+    tm.asked++; if (ok) { tm.right++; moveNow(S.turn, 2); }
+    addLog(`${tm.name}: подреди: ${ok ? 'вярно (+2)' : 'невярно'}.`);
+    $('after').innerHTML = verdictHtml(ok, ok ? 'Редът е верен!' : 'Редът не е верен', 'Верният ред: ' + set.items.map((t, n) => `${n + 1}. ${t}`).join('  '), set.ch, ok ? `${tm.name}: +2 полета.` : 'Без промяна.') + `<div class="card-foot" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`;
+    $('checkBtn').remove();
+    renderSide();
+    $('contBtn').addEventListener('click', () => nextTurn());
+    $('after').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  };
+  $('checkBtn').addEventListener('click', check);
+  startTimer(S.time ? S.time + 15 : 0, check);
+}
+
+/* ---------------- event ---------------- */
+function eventCard() {
+  const ev = draw('e', EVENTS);
+  const tm = S.teams[S.turn];
+  let fx = '', again = false;
+  if (ev.fx.move) { moveNow(S.turn, ev.fx.move); fx = `${tm.name}: ${signed(ev.fx.move)} ${fieldsWord(ev.fx.move)}.`; }
+  if (ev.fx.all) { S.teams.forEach((_, k) => moveNow(k, ev.fx.all)); fx = `Всички комитети: ${signed(ev.fx.all)} ${fieldsWord(ev.fx.all)}.`; }
+  if (ev.fx.skip) { tm.skip += ev.fx.skip; fx = `${tm.name} пропуска следващия си ход.`; }
+  if (ev.fx.again) { again = true; fx = `${tm.name} хвърля зара още веднъж.`; }
+  addLog(`Събитие „${ev.title}“: ${fx}`);
+  openCard(`${headHtml('Събитие', '#e9dcc0')}
+    <div class="event-title">${esc(ev.title)}</div>
+    <div class="event-text">${esc(ev.text)}</div>
+    <div class="fx">${esc(fx)}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="contBtn">Продължи</button></div>`);
+  renderSide();
+  $('contBtn').addEventListener('click', () => nextTurn(again));
+}
+
+/* ---------------- win ---------------- */
+function showWin() {
+  const w = S.teams[S.winner];
+  const rows = S.teams.slice().sort((a, b) => b.pos - a.pos || b.right - a.right)
+    .map(t => `<div><span>${esc(t.name)}</span><span>поле ${t.pos} · верни ${t.right}/${t.asked}</span></div>`).join('');
+  openCard(`<div class="card-head"><span class="kind"><i style="background:${TEAM_HEX[w.color]}"></i>Край на играта</span></div>
+    <div class="win-title">${esc(w.name)} стигна до безсмъртието!</div>
+    <div class="stats">${rows}</div>
+    <div class="card-foot"><span class="q-sub">Прочетете отново местата от одата, в които сгрешихте.</span>
+      <button type="button" class="btn-dark" id="againBtn">Нова игра</button></div>`);
+  renderSide();
+  $('againBtn').addEventListener('click', newGame);
+}
+function newGame() { closeCard(); S = null; $('game').hidden = true; $('setup').hidden = false; }
+
+/* ---------------- top tools ---------------- */
+$('newBtn').addEventListener('click', () => {
+  openCard(`<div class="card-head"><span class="kind">Нова игра</span></div>
+    <div class="q-text">Да започнем ли нова игра? Сегашната ще бъде загубена.</div>
+    <div class="card-foot"><button type="button" class="btn-ghost" id="noBtn">Не, продължаваме</button><button type="button" class="btn-dark" id="yesBtn">Да, нова игра</button></div>`);
+  $('noBtn').addEventListener('click', () => { closeCard(); renderSide(); });
+  $('yesBtn').addEventListener('click', newGame);
+});
+$('rulesBtn').addEventListener('click', () => {
+  const rules = document.querySelector('.rules').outerHTML;
+  openCard(`<div class="card-head"><span class="kind">Правила</span></div>
+    <div style="color:#1d1a14">${rules}</div>
+    <div class="card-foot" style="justify-content:flex-end"><button type="button" class="btn-dark" id="closeRules">Затвори</button></div>`);
+  $('card').querySelectorAll('.rules b').forEach(b => b.style.color = '#7f1f19');
+  $('card').querySelector('.rules').style.color = '#1d1a14';
+  $('closeRules').addEventListener('click', () => { closeCard(); renderSide(); });
+});
+$('fsBtn').addEventListener('click', async () => {
+  try {
+    if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+    else await document.exitFullscreen();
+  } catch (e) { $('fsBtn').textContent = 'Цял екран не е наличен'; }
+});
+
+/* keep the game when the page is updated while open */
+function boot(data) {
+  if (data && data.state) { S = data.state; S.phase = 'roll'; showGame(); }
+}
+boot({});
+</script>
+</body>
+</html>

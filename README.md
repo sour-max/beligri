@@ -10,12 +10,14 @@ site.css            стилове на сайта: „читанка“ — х�
 404.html            страница „няма такава страница“
 favicon.svg         лого: страната „пет“ на зар, завъртяна като ромб, като мотив от шевица
 img/                картинки за страниците (снимка на игралното поле)
+levski/index.html     „Апостол Левски“ по одата „Левски“ → beligri.org/levski/
 pod-igoto/index.html  „Пътят към свободата“ по „Под игото“ → beligri.org/pod-igoto/
 bai-ganyo/index.html  „Депутацията“ по „Бай Ганьо се върна от Европа“ → beligri.org/bai-ganyo/
 cis-moll/index.html   „Съдбата хлопа“ по „Cis moll“ → beligri.org/cis-moll/
 nvo/index.html        как игрите помагат за НВО (новият формат от 2027 г.)
 za-nas/index.html     за нас
 za-uchitelya/index.html  за учителя: как се провежда игра за ~15 минути от часа, връзка към PDF
+levski/otgovori.pdf      отговори за учителя по „Левски“
 pod-igoto/otgovori.pdf   отговори за учителя (генерират се със скрипт, вж. по-долу)
 bai-ganyo/otgovori.pdf   същото за „Бай Ганьо“
 cis-moll/otgovori.pdf    същото за „Cis moll“
@@ -39,6 +41,7 @@ functions/_middleware.js  пренасочване www → beligri.org
 Генерира се от данните на самата игра, затова след всяка промяна във въпросите трябва да се генерира отново:
 
 ```
+node tools/answer-key.js levski "„Левски“" "Апостол Левски" одата
 node tools/answer-key.js pod-igoto "„Под игото“" "Пътят към свободата"
 node tools/answer-key.js bai-ganyo "„Бай Ганьо се върна от Европа“" "Депутацията" разказа
 node tools/answer-key.js cis-moll "„Cis moll“" "Съдбата хлопа" поемата
@@ -64,7 +67,7 @@ Cloudflare Pages, проект `beligri` (адрес по подразбиран
 
 ```
 mkdir -p /tmp/beligri-dist
-git archive HEAD -- index.html site.css 404.html favicon.svg img pod-igoto bai-ganyo cis-moll nvo za-nas za-uchitelya | tar -x -C /tmp/beligri-dist
+git archive HEAD -- index.html site.css 404.html favicon.svg img levski pod-igoto bai-ganyo cis-moll nvo za-nas za-uchitelya | tar -x -C /tmp/beligri-dist
 npx wrangler pages deploy /tmp/beligri-dist --project-name beligri --branch main
 ```
 
